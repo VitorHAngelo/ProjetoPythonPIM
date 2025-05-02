@@ -149,6 +149,7 @@ def cadastro():
     """Função destinada a cadastrar um novo usuário e salvar no JSON"""
     usuario = {}
     print("Seja bem-vindo! Faremos seu cadastro a seguir:")
+    print(dados_seguros)
     while True:
         while True:
             nome = input("Insira seu nome com sobrenome: ").title()
