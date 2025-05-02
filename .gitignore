@@ -1,5 +1,6 @@
-# Arquivo para ignorar as pastas e arquivos antes de subir para o GitHub
+# Este arquivo ignora as pastas e arquivos listados antes de subir para o GitHub
 /files/
 /env/ 
 /__pycache__/
 /.git/
+teste.py

@@ -1,3 +1,5 @@
+# Arquivo de textos para o projeto de Python
+
 menu_login = f"""{' Menu Login '.center(50, '=')}\n
 Bem vindo ao menu! Escolha a opção desejada:
 1 - Login

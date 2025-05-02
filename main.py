@@ -1,5 +1,6 @@
 import textos
 from time import sleep
+from datetime import datetime
 import json
 import os
 from sys import exit
@@ -8,8 +9,11 @@ from hashlib import sha256
 from dotenv import get_key
 from cryptography.fernet import Fernet
 
+# Variáveis globais
 usuario = None
+horario_login = None
 
+# Constantes
 FILES_PATH = "./files/"
 USER_DATA_PATH = FILES_PATH + "user_data.json"
 ENV_PATH = FILES_PATH + ".env"
@@ -64,7 +68,11 @@ def gerar_ra():
 
 def gerar_dados_seguros() -> dict:
     """Gera _dict_ com todos usuários e seus dados, removendo os dados sensíveis."""
+    if not os.path.exists(USER_DATA_PATH):
+        print("Arquivo .JSON inexistente")
+        return
     file_data = descriptografar_json()
+    print(file_data)
     dados_seguros = {}
     for user in file_data:
         dados_seguros[user] = file_data[user]
@@ -119,16 +127,21 @@ def descriptografar_json():
     "fernet = criar_fernet()"  # Instanciariamos o fernet e atribuiriamos a variavel fernet
     "dados_descriptografados = fernet.decrypt(dados_criptografados)"
     "dados_json = dados_descriptografados.decode()"
-    return json.loads(dados_json)
+    return json.loads(dados_json).copy()
 
 
 def update_json(cod_aluno, usuario):
-    """cod_aluno: RA em _str_\n
-    usuario: _dict_ com dados do usuário\n
-    Função utilizada para atualizar o JSON, sem que ele fique com os dados desproteg.
-    em nenhum momento."""
+    """Função utilizada para atualizar o JSON, sem que ele fique com os dados desproteg.
+    em nenhum momento.\n
+    **Argumentos:**
+    cod_aluno: RA em _str_\n
+    usuario: _dict_ com dados do usuário"""
     file_data = descriptografar_json()
-    file_data[cod_aluno] = dict(list(usuario.items())[1:])
+    usuario_sem_ra = dict(list(usuario.items())[1:])
+    if cod_aluno in file_data:
+        file_data[cod_aluno].update(usuario_sem_ra)
+    else:
+        file_data[cod_aluno] = dict(usuario_sem_ra)
     dados_bytes = json.dumps(file_data).encode()
     dados_criptografados = criar_fernet().encrypt(dados_bytes)
     with open(USER_DATA_PATH, "wb") as file:
@@ -144,6 +157,11 @@ def limpar_console():
         os.system("clear")
 
 
+def get_horario() -> datetime:
+    """Retorna a data/horário atual"""
+    return datetime.now()
+
+
 def cadastro():
     """Função destinada a cadastrar um novo usuário e salvar no JSON"""
     usuario = {}
@@ -154,12 +172,14 @@ def cadastro():
             if not nome.replace(" ", "").isalpha():
                 'nome = nome.replace(" ", "")'
                 print("Utilize somente letras e espaços, por favor.")
-            elif nome.count() < 3:
+            elif len(nome) < 3:
                 print("Nome muito curto, favor insira um nome válido")
             else:
                 break
         while True:
-            idade = input(f"Olá {nome.split()[:2]}, por favor, insira sua idade: ")
+            idade = input(
+                f"Olá {' '.join(nome.split()[:2])}, por favor, insira sua idade: "
+            )
             if not idade.isdecimal():
                 print("Por gentileza, utilize somente números!")
                 continue
@@ -179,7 +199,7 @@ def cadastro():
                 else:
                     print(
                         "Senha inválida, favor utilizar ao menos 6 letras, números e caracteres \
-    especiais, espaços não são válidos."
+especiais, espaços não são válidos."
                     )
                     continue
             else:
@@ -192,7 +212,7 @@ def cadastro():
             "nome": nome,
             "idade": idade,
             "senha": senha_hash,
-            "horas_totais": 0,
+            "minutos_uso": 0,
             "qtd_acertos": 0,
             "qtd_erros": 0,
             "media_horas": 0,
@@ -203,11 +223,12 @@ def cadastro():
         }
         print(
             f"""============================= ATENÇÃO =============================
-    Seu RA é: {cod_aluno}. ANOTE este código pois será utilizado para realizar seu login!
-    Aperte ENTER para prosseguir"""
+Seu RA é: {cod_aluno}. ANOTE este código pois será utilizado para realizar seu login!
+Aperte ENTER para prosseguir"""
         )
         input("===================================================================\n")
         update_json(cod_aluno, usuario)
+        return
 
 
 def hashear_senha(entrada_senha: str, salt: str):
@@ -245,6 +266,7 @@ def login() -> dict:
     **Retorna:**
         _dict_: Dicionário com os dados do usuário"""
     global usuario
+    global horario_login
     file_data = descriptografar_json()
     retorno_usuario = input(
         "Digite seu RA, ou 'voltar' para retornar ao menu.\n"
@@ -260,19 +282,20 @@ def login() -> dict:
     del file_data
     while True:
         entrada_senha = input(
-            f'Olá, {usuario["nome"].split()[:2]}! Favor, insira sua senha: '
+            f'Olá, {" ".join(usuario["nome"].split()[:2])}! Favor, insira sua senha: '
         )
         limpar_console()
         if entrada_senha.upper() == "VOLTAR":
             return
         senha_hash = hashear_senha(entrada_senha, usuario["salt"])
         if senha_hash == usuario["senha"]:
-            input("Login realizado com sucesso! Aperte ENTER para continuar.\n")
             break
         else:
             print("Senha incorreta. Se desejar, digite 'voltar'")
     usuario.pop("senha")
     usuario.pop("salt")
+    input("Login realizado com sucesso! Aperte ENTER para continuar.\n")
+    horario_login = get_horario()
     return usuario
 
 
@@ -306,7 +329,7 @@ def recuperacao():
                 else:
                     while True:
                         entrada_senha = input(
-                            f'Olá, {usuario["nome"].split()[:2]}! Favor, insira sua nova senha:\n'
+                            f'Olá, {" ".join(usuario["nome"].split()[:2])}! Favor, insira sua nova senha:\n'
                         )
                         limpar_console()
                         entrada_senha1 = input("Repita a senha: ")
@@ -377,6 +400,10 @@ def menu_principal():
         elif escolha == "3":
             print("Pendente")
         elif escolha == "4":
+            tempo_uso = get_horario() - horario_login
+            usuario["minutos_uso"] = int(tempo_uso.total_seconds() // 60)
+            file_data = descriptografar_json()
+            update_json(usuario["RA"], usuario)
             usuario = None
             print("Logoff realizado.")
             return
@@ -407,6 +434,7 @@ def main():
         elif escolha == "5":
             senha = input("Digite a senha de admin: ")
             if senha == get_key(ENV_PATH, "ADMIN_PW"):
+                gerar_dados_seguros()
                 limpar_console()
                 gerar_csv()
 
