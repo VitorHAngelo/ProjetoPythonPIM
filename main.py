@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import textos
 from time import sleep
 import json
@@ -592,6 +593,13 @@ def Ifs():
             print("\nOpção invalida, estamos te direcionando ao MENU.\n")
     elif escolha == "3":
         print("\n================ Consultar Progresso ================\n")
+
+
+
+
+
+
+        
         print("Nome: ", nome)
         print("Idade ", idade)
         print("Média da sua idade em relação aos outros usuários:", mediaIdade)
@@ -609,7 +617,16 @@ def Ifs():
         elif escolha.lower() == "ranking":
             print("ranking. . .")
         elif escolha.lower() == "exibir":
-            print("Visualização dos grafico mil grau chique no ultimo")
+             DataGraf = dados_seguros
+             eixo_x_Aluno = DataGraf["idade"]
+             eixo_y_Idade = DataGraf["mediaidade"]
+
+             plt.title("Média da sua idade comparada aos outros alunos")
+             plt.xlabel("Sua idade")
+             plt.ylabel("Outros alunos")
+             plt.bar(eixo_x_Aluno, eixo_y_Idade, linestyle="-", marker="o")
+             plt.grid(True)
+             plt.show()
         else:
             print("Opção invalida")
     elif escolha == "4":
