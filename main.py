@@ -72,7 +72,6 @@ def gerar_dados_seguros() -> dict:
         print("Arquivo .JSON inexistente")
         return
     file_data = descriptografar_json()
-    print(file_data)
     dados_seguros = {}
     for user in file_data:
         dados_seguros[user] = file_data[user]
@@ -80,6 +79,19 @@ def gerar_dados_seguros() -> dict:
         dados_seguros[user].pop("salt")
     del file_data
     return dados_seguros
+
+
+# ============= ARQUIVO ENV =============
+
+
+def criar_env():
+    if not os.path.exists("files/.env"):
+        pepper = os.urandom(8).hex()
+        fernet_key = Fernet.generate_key().decode()
+        with open("files/.env", "w") as file:
+            file.write(
+                f"PEPPER={pepper}\nFERNET_KEY={fernet_key}\nADMIN_PW=ads2025unip"
+            )
 
 
 # ============= ARQUIVO CSV =============
@@ -165,7 +177,7 @@ def get_horario() -> datetime:
 def cadastro():
     """Função destinada a cadastrar um novo usuário e salvar no JSON"""
     usuario = {}
-    print("Seja bem-vindo! Faremos seu cadastro a seguir:")
+    print("\nSeja bem-vindo! Faremos seu cadastro a seguir:")
     while True:
         while True:
             nome = input("Insira seu nome com sobrenome: ").title()
@@ -215,7 +227,6 @@ especiais, espaços não são válidos."
             "minutos_uso": 0,
             "qtd_acertos": 0,
             "qtd_erros": 0,
-            "media_horas": 0,
             "media_acertos": 0,
             "media_erros": 0,
             "media_idade": 0,
@@ -406,6 +417,7 @@ def menu_principal():
             update_json(usuario["RA"], usuario)
             usuario = None
             print("Logoff realizado.")
+            limpar_console()
             return
         elif escolha == "5":
             simular_carregamento("Saindo do programa", "Até a próxima!")
@@ -413,6 +425,7 @@ def menu_principal():
 
 
 def main():
+    criar_env()
     criar_json()
     global usuario
     while True:
