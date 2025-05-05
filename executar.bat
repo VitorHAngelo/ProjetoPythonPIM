@@ -22,7 +22,7 @@ if not exist "files\requirements.txt" (
 echo Instalando pacotes do 'requirements.txt'...
 .\env\Scripts\python.exe -m pip install -r .\files\requirements.txt
 
-clear
+cls
 
 echo Executando o main.py...
 .\env\Scripts\python.exe main.py

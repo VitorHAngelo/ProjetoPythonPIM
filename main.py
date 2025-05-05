@@ -174,10 +174,23 @@ def get_horario() -> datetime:
     return datetime.now()
 
 
+def verificar_duplicidade(nome, idade):
+    """Verifica se usuário com mesmo nome e idade já existe no cadastro.
+
+    **Retorno**:
+        _boolean_: True caso positivo ou False se chegar ao fim do loop sem match.
+    """
+    file_data = descriptografar_json()
+    for usuario in file_data:
+        if file_data[usuario]["nome"] == nome and file_data[usuario]["idade"] == idade:
+            return True
+    return False
+
+
 def cadastro():
     """Função destinada a cadastrar um novo usuário e salvar no JSON"""
     usuario = {}
-    print("\nSeja bem-vindo! Faremos seu cadastro a seguir:")
+    print("Seja bem-vindo! Faremos seu cadastro a seguir:")
     while True:
         while True:
             nome = input("Insira seu nome com sobrenome: ").title()
@@ -199,7 +212,23 @@ def cadastro():
             if idade < 4 or idade > 120:
                 print("Insira uma idade válida!")
             else:
+                limpar_console()
                 break
+        while True:
+            confirmacao_dados = input(
+                f"Verifique os dados inseridos:\nNome: {nome}\n\
+Idade: {idade}\nDigite 'S' para continuar ou 'N' para começar novamente.\n"
+            ).upper()
+            if confirmacao_dados in ("S", "N"):
+                break
+        if confirmacao_dados == "N":
+            continue
+        if verificar_duplicidade(nome, idade):
+            input(
+                "Usuário já cadastrado, faça seu login ou recupere seus dados.\n\
+Aperte ENTER para retornar ao Menu.\n"
+            )
+            return
         while True:
             senha = input("Insira sua senha: ")
             limpar_console()
@@ -398,28 +427,126 @@ especiais, espaços não são válidos."
             return
 
 
+def logoff():
+    """Função destinada a contabilizar o tempo que o usuário utilizou o programa e
+    incrementar em seus perfil, também define a variável global usuario como None
+    indicando que não sessão ativa."""
+    global usuario
+    tempo_uso = get_horario() - horario_login
+    usuario["minutos_uso"] += int(tempo_uso.total_seconds() // 60)
+    update_json(usuario["RA"], usuario)
+    usuario = None
+    print("Logoff realizado.")
+
+
+def aprender_python_print():
+    print(textos.aprender_py_print_um)  # Mostra a primeira parte do tutorial
+    comando_usuario = input("Tente você mesmo! Digite a função acima.\n").replace(
+        " ", ""
+    )  # Recebe a tentativa do usuário de digitar a função e tira os espaços com replace
+    if comando_usuario.lower() == "sair":
+        return
+    while (
+        comando_usuario != "print()"
+    ):  # Enquanto ele não digitar corretamente, será solicitado novamente
+        comando_usuario = input(
+            "Tente mais uma vez, digite a função abaixo:\nprint()\nLembre-se dos \
+parênteses e de utilizar letras minúsculas.\n (Ou digite 'sair' para voltar ao Menu)\n"
+        ).replace(
+            " ", ""
+        )  # Dicas caso o usuário erre o comando
+        if comando_usuario.lower() == "sair":
+            return
+
+    print(f"\n{textos.aprender_py_print_dois}")  # Mostra a segunda parte do tutorial
+    while True:
+        entrada_split = (
+            input('Tente você mesmo! Digite a função:  print("mensagem").\n')
+            .replace('"', "'")
+            .split("'")
+        )
+
+        if comando_usuario.lower() == "sair":
+            return
+
+        if len(entrada_split) != 3:
+            print(
+                "Tente mais uma vez, digite a função a seguir, o uso das aspas são \
+imprescindíveis.  print(\"mensagem\")  (Ou digite 'sair' para voltar ao Menu)\n"
+            )
+            continue
+        elif entrada_split[0] != "print(" and entrada_split[-1] != ")":
+            print(
+                "Tente mais uma vez, digite a função a seguir, o uso das aspas são \
+imprescindíveis.  print(\"mensagem\")  (Ou digite 'sair' para voltar ao Menu)\n"
+            )
+            continue
+        else:
+            break
+    print(
+        f"\n{entrada_split[1]}\n\nMuito bem! É assim que se faz!! Como você pode ver acima,\n\
+foi impresso o conteúdo que você definiu entre aspas em uma nova linha.\n"
+    )
+    input(f"Aperte ENTER para terminar esta atividade.\n")
+    limpar_console()
+
+
+def aprender_python_input():
+    print(textos.aprender_py_input_um)
+    comando_usuario = input()
+    if comando_usuario.lower() == "sair":
+        return
+    while comando_usuario != "input()":
+        comando_usuario = input(
+            "Vamos tentar mais uma vez, lembre-se: funções utilizam letras minúsculas e tem parênteses depois da palavra.\n"
+        )
+        if comando_usuario.lower() == "sair":
+            return
+
+    entrada_usuario = input(
+        "Exatamente assim! Agora o Python vai querer receber sua mensagem, tente escrever algo:\n"
+    )
+    print(f"\n{entrada_usuario}")  # Imprime o que o usuário inseriu no input acima
+    print(textos.aprender_py_input_dois)  # Imprime mensagem dois
+    input(f"\nAperte ENTER para terminar esta atividade.")
+
+
+def menu_aprender():
+    """Menu destinado a escolha de qual lição o usuário quer fazer."""
+    limpar_console()
+    while True:
+        escolha = None
+        while escolha not in ("1", "2", "3", "4"):
+            escolha = input(textos.menu_aprender)
+        limpar_console()
+        if escolha == "1":  # Lógica
+            print(textos.aprender_logica)
+        elif escolha == "2":  # Python
+            aprender_python_print()
+        elif escolha == "3":  # Cibersegurança
+            print(textos.aprender_ciberseguranca)
+        elif escolha == "4":  # Voltar
+            return
+
+
 def menu_principal():
     global usuario
     while True:
         escolha = None
-        while escolha not in ["1", "2", "3", "4", "5"]:
-            escolha = input(textos.menu_principal)
-        if escolha == "1":
+        while escolha not in ("1", "2", "3", "4", "5"):
+            escolha = input(textos.menu_principal.format(usuario["nome"]))
+        if escolha == "1":  # Aprender
+            menu_aprender()
+        elif escolha == "2":  # Quiz
             print("Pendente")
-        elif escolha == "2":
+        elif escolha == "3":  # Progresso
             print("Pendente")
-        elif escolha == "3":
-            print("Pendente")
-        elif escolha == "4":
-            tempo_uso = get_horario() - horario_login
-            usuario["minutos_uso"] = int(tempo_uso.total_seconds() // 60)
-            file_data = descriptografar_json()
-            update_json(usuario["RA"], usuario)
-            usuario = None
-            print("Logoff realizado.")
+        elif escolha == "4":  # Logoff
+            logoff()
             limpar_console()
             return
-        elif escolha == "5":
+        elif escolha == "5":  # Sair
+            logoff()
             simular_carregamento("Saindo do programa", "Até a próxima!")
             exit()
 
@@ -430,9 +557,10 @@ def main():
     global usuario
     while True:
         escolha = None
+        limpar_console()
         if usuario is not None:
             menu_principal()
-        while escolha not in ["1", "2", "3", "4", "5", "6", "7"]:
+        while escolha not in ("1", "2", "3", "4", "5", "6", "7"):
             escolha = input(textos.menu_login)
             limpar_console()
         if escolha == "1":
@@ -443,7 +571,7 @@ def main():
             recuperacao()
         elif escolha == "4":
             simular_carregamento("Saindo do programa", "Até a próxima.")
-            break
+            exit()
         elif escolha == "5":
             senha = input("Digite a senha de admin: ")
             if senha == get_key(ENV_PATH, "ADMIN_PW"):
