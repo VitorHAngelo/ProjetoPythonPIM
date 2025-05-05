@@ -594,40 +594,38 @@ def Ifs():
             print("\nOpção invalida, estamos te direcionando ao MENU.\n")
     elif escolha == "3":
         print("\n================ Consultar Progresso ================\n")
-
-
-
-
-
-
+        gerar_dados_seguros()
         
-        print("Nome: ", nome)
-        print("Idade ", idade)
-        print("Média da sua idade em relação aos outros usuários:", mediaIdade)
-        print("\nQuantidade de acertos: ", qtdAcertos)
-        print("Quantidade de erros: ", qtdErros)
-        print("Média de acertos:", mediaAcertos)
-        print("Média de erros:", mediaErros)
-        print("\nHoras totais de uso do programa: ", horasTotais)
-        print("Média de horas uso do programa: ", mediaHoras)
-        print("\nDigite 'menu' para voltar ao menu")
-        print("Digite 'ranking' para conferir sua pontuação no ranking")
-        print("Digite 'exibir' para visualizar de forma gráfica ")
+        if dados_seguros.get(cod_aluno) == cod_aluno:
+            print("Nome: ", dados_seguros[nome])
+            print("Idade ", dados_seguros[idade])
+            print("Média da sua idade em relação aos outros usuários:", dados_seguros[mediaidade])
+            print("\nQuantidade de acertos: ", dados_seguros[qtdAcertos])
+            print("Quantidade de erros: ", dados_seguros[qtdErros])
+            print("Média de acertos:", dados_seguros[MediaAcertos])
+            print("\nHoras totais de uso do programa: ", dados_seguros[horastotais])
+            print("Média de horas uso do programa: ", dados_seguros[mediadehoras])
+            
+            print("\nDigite 'menu' para voltar ao menu")
+            print("Digite 'ranking' para conferir sua pontuação no ranking")
+            print("Digite 'exibir' para visualizar de forma gráfica ")            
+
         if escolha.lower() == "menu":
             pass
         elif escolha.lower() == "ranking":
             print("ranking. . .")
+            
         elif escolha.lower() == "exibir":
-             DataGraf = dados_seguros
-             eixo_x_Aluno = DataGraf["idade"]
-             eixo_y_Idade = DataGraf["mediaidade"]
-
+           
+             eixo_x_Aluno = dados_seguros[idade]
+             eixo_y_Idade = dados_seguros[mediaidade]
              plt.title("Média da sua idade comparada aos outros alunos")
              plt.xlabel("Sua idade")
              plt.ylabel("Outros alunos")
              plt.bar(eixo_x_Aluno, eixo_y_Idade, linestyle="-", marker="o")
              plt.grid(True)
              plt.show()
+            
         else:
             print("Opção invalida")
     elif escolha == "4":
