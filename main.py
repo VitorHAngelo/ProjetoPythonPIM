@@ -1,6 +1,5 @@
 import textos
 from time import sleep
-from datetime import datetime
 import json
 import os
 from sys import exit
@@ -8,6 +7,9 @@ from csv import DictWriter
 from hashlib import sha256
 from dotenv import get_key
 from cryptography.fernet import Fernet
+from random import randint
+from aprender import *
+from utilitarios import limpar_console, get_horario
 
 # Variáveis globais
 usuario = None
@@ -160,20 +162,6 @@ def update_json(cod_aluno, usuario):
         file.write(dados_criptografados)
 
 
-# ============= FUNÇÕES GERAIS =============
-def limpar_console():
-    """Função para limpar o console"""
-    if os.name == "nt":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-
-def get_horario() -> datetime:
-    """Retorna a data/horário atual"""
-    return datetime.now()
-
-
 def verificar_duplicidade(nome, idade):
     """Verifica se usuário com mesmo nome e idade já existe no cadastro.
 
@@ -279,7 +267,7 @@ def hashear_senha(entrada_senha: str, salt: str):
         entrada_senha (_str_): Senha crua inserida pelo usuário
         salt (_str_): String hexadecimal individual, armazenada no _dict_ de cada usuário
     **Retorna:**
-        _str_: String protegida com salt, pepper e criptog. sha256
+        _str_: String hexadecimal com salt, pepper e criptog. sha256
     """
     senha_salt_pepper = salt + entrada_senha + str(get_key(ENV_PATH, "PEPPER"))
     objeto_hash = sha256(senha_salt_pepper.encode())
@@ -439,78 +427,6 @@ def logoff():
     print("Logoff realizado.")
 
 
-def aprender_python_print():
-    print(textos.aprender_py_print_um)  # Mostra a primeira parte do tutorial
-    comando_usuario = input("Tente você mesmo! Digite a função acima.\n").replace(
-        " ", ""
-    )  # Recebe a tentativa do usuário de digitar a função e tira os espaços com replace
-    if comando_usuario.lower() == "sair":
-        return
-    while (
-        comando_usuario != "print()"
-    ):  # Enquanto ele não digitar corretamente, será solicitado novamente
-        comando_usuario = input(
-            "Tente mais uma vez, digite a função abaixo:\nprint()\nLembre-se dos \
-parênteses e de utilizar letras minúsculas.\n (Ou digite 'sair' para voltar ao Menu)\n"
-        ).replace(
-            " ", ""
-        )  # Dicas caso o usuário erre o comando
-        if comando_usuario.lower() == "sair":
-            return
-
-    print(f"\n{textos.aprender_py_print_dois}")  # Mostra a segunda parte do tutorial
-    while True:
-        entrada_split = (
-            input('Tente você mesmo! Digite a função:  print("mensagem").\n')
-            .replace('"', "'")
-            .split("'")
-        )
-
-        if comando_usuario.lower() == "sair":
-            return
-
-        if len(entrada_split) != 3:
-            print(
-                "Tente mais uma vez, digite a função a seguir, o uso das aspas são \
-imprescindíveis.  print(\"mensagem\")  (Ou digite 'sair' para voltar ao Menu)\n"
-            )
-            continue
-        elif entrada_split[0] != "print(" and entrada_split[-1] != ")":
-            print(
-                "Tente mais uma vez, digite a função a seguir, o uso das aspas são \
-imprescindíveis.  print(\"mensagem\")  (Ou digite 'sair' para voltar ao Menu)\n"
-            )
-            continue
-        else:
-            break
-    print(
-        f"\n{entrada_split[1]}\n\nMuito bem! É assim que se faz!! Como você pode ver acima,\n\
-foi impresso o conteúdo que você definiu entre aspas em uma nova linha.\n"
-    )
-    input(f"Aperte ENTER para terminar esta atividade.\n")
-    limpar_console()
-
-
-def aprender_python_input():
-    print(textos.aprender_py_input_um)
-    comando_usuario = input()
-    if comando_usuario.lower() == "sair":
-        return
-    while comando_usuario != "input()":
-        comando_usuario = input(
-            "Vamos tentar mais uma vez, lembre-se: funções utilizam letras minúsculas e tem parênteses depois da palavra.\n"
-        )
-        if comando_usuario.lower() == "sair":
-            return
-
-    entrada_usuario = input(
-        "Exatamente assim! Agora o Python vai querer receber sua mensagem, tente escrever algo:\n"
-    )
-    print(f"\n{entrada_usuario}")  # Imprime o que o usuário inseriu no input acima
-    print(textos.aprender_py_input_dois)  # Imprime mensagem dois
-    input(f"\nAperte ENTER para terminar esta atividade.")
-
-
 def menu_aprender():
     """Menu destinado a escolha de qual lição o usuário quer fazer."""
     limpar_console()
@@ -520,9 +436,9 @@ def menu_aprender():
             escolha = input(textos.menu_aprender)
         limpar_console()
         if escolha == "1":  # Lógica
-            print(textos.aprender_logica)
+            menu_aprender_logica(textos)
         elif escolha == "2":  # Python
-            aprender_python_print()
+            menu_aprender_python(textos)
         elif escolha == "3":  # Cibersegurança
             print(textos.aprender_ciberseguranca)
         elif escolha == "4":  # Voltar
@@ -534,7 +450,9 @@ def menu_principal():
     while True:
         escolha = None
         while escolha not in ("1", "2", "3", "4", "5"):
-            escolha = input(textos.menu_principal.format(usuario["nome"]))
+            escolha = input(
+                textos.menu_principal.format(" ".join(usuario["nome"].split()[:2]))
+            )
         if escolha == "1":  # Aprender
             menu_aprender()
         elif escolha == "2":  # Quiz

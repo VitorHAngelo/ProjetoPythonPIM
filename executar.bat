@@ -1,5 +1,7 @@
 @echo off
 
+color f0
+
 if not exist "env" (
     echo Ambiente virtual nao encontrado, criando ambiente...
     python -m venv env

@@ -7,19 +7,17 @@
 - [ ]
 - [ ]
 
----
-
 ## 🔹 Vitor
 - [x] Menu Principal
 - [x] Contagem de minutos de uso
 - [x] Confirmação Nome e Idade
 - [x] Usuários duplicados? nome, idade iguais?
-- [o] Aprender (Python OK, falta Ciber e Lógica)
+- [o] Aprender (falta Ciber e história do Python)
 - [ ] Ranking
-- [ ] Idade por nascimento
-- [ ] Log do .JSON
+- [ ] Idade por nascimento?
 - [ ] Quiz
-- [ ] Alguma forma de proteger o .env?
+- [ ]
+- [ ]
 - [ ]
 
 ## 🔹 Gustavo

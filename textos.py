@@ -14,8 +14,8 @@ menu_principal = (
     f"{' Menu Principal '.center(50, '=')}\n"
     + """
 Bem vindo, {}! Escolha a opção desejada: 
-1 - Aprender (Acesse um texto informativo sobre Phyton)
-2 - Quiz (Comece o Quiz de perguntas sobre Python)
+1 - Aprender (Lições sobre diferentes assuntos)
+2 - Quiz (Teste seus conhecimentos sobre as matérias apresentadas)
 3 - Consulte seu progresso (Confira sua média de acertos ou seus minutos ativo no programa)
 4 - Logout (Sair da sua conta aluno)
 5 - Sair (Encerra o programa)\n"""
@@ -27,6 +27,21 @@ Escolha sobre qual assunto você gostaria de aprender:
 2 - > Python
 3 - > Cibersegurança
 4 - Voltar ao Menu\n"""
+
+menu_aprender_logica = f"""{' Menu Aprender LÓGICA '.center(50, '=')}\n
+Escolha uma lição sobre lógica:
+1 - > O que seria lógica?
+2 - > Qual número é maior?
+3 - > Par ou ímpar?
+4 - > Estamos pensando igual?
+5 - Voltar ao Menu Aprender\n"""
+
+menu_aprender_python = f"""{' Menu Aprender PYTHON '.center(50, '=')}\n
+Escolha uma lição sobre lógica:
+1 - > O que é Python
+2 - > Função print()
+3 - > Função input()
+4 - Voltar ao Menu Aprender()\n"""
 
 # ============================ APRENDER ============================
 
@@ -76,11 +91,26 @@ aprender_py_input_dois = """
 Como pode ver acima, ele recebeu sua mensagem e imprimiu, conforme você solicitou.
 Parabéns!!
 """
+aprender_logica = f"""
+Hoje em dia, tudo que fazemos em nossos computadores e celulares só são possíveis devido
+a uma série de instruções que alguém como nós, passou, passo a passo para esse dispositivo.
+O detalhe importante é que ele precisa, diferente de nós humanos, de tudo muito bem
+detalhado, pois irá executar da forma exatamente que foi passada.
+Nessas instruções, podemos passar as mais diferentes instruções, o computador é muito bom
+e super rápido nisso! Aperte ENTER e escolha alguma opção para ver alguns exemplos:
+"""
+
 
 aprender_ciberseguranca = f"""
 aprender_segurança
 """
 
-aprender_logica = f"""
-aprender_lógica
-"""
+# Escrevi na parte de lógica, mas fugiu do assunto;
+"""Com a invenção e frequentes avanços da tecnologia e computadores pessoais, foi fundamental
+criarmos uma forma mais fácil entre a nossa linguagem e a que o computador entende.
+
+Como ele lida com a transmissão elétrica entre suas 'peças', ele entende o número 0 como
+'sem energia' e 1 como 'com energia', e essa mudança entre 0 e 1 frequentes são 
+interpretadas como dados. Como seria muito complicado aprendermos a lidarmos com ele dessa
+forma, foram criadas linguagens de programação, e utilizando algumas palavras e símbolos 
+mais próximas do que conhecemos tornou essa comunicação bem mais fácil."""
