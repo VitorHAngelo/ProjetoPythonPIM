@@ -616,7 +616,8 @@ def Ifs():
             print("ranking. . .")
             
         elif escolha.lower() == "exibir":
-           
+             
+             #GRAFICO MEDIA DA IDADE
              eixo_x_Aluno = dados_seguros[idade]
              eixo_y_Idade = dados_seguros[mediaidade]
              plt.title("Média da sua idade comparada aos outros alunos")
@@ -625,7 +626,18 @@ def Ifs():
              plt.bar(eixo_x_Aluno, eixo_y_Idade, linestyle="-", marker="o")
              plt.grid(True)
              plt.show()
+
+             #GRAFICO HORAS TOTAIS
+             eixo_XHoras = dados_seguros[horastotais]
+             eixo_YHoras = dados_seguros[mediahoras]
+             plt.title("Média do seu uso do programa em minutos comparada aos outros alunos")
+             plt.xlabel("Suas horas")
+             plt.ylabel("Media dos outros alunos")
+             plt.bar(eixo_XHoras, eixo_YHoras, linestyle="-", marker="o")
+             plt.grid(True)
+             plt.show()
             
+        
         else:
             print("Opção invalida")
     elif escolha == "4":
