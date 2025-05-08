@@ -1,5 +1,4 @@
 import textos
-from time import sleep
 import json
 import os
 from sys import exit
@@ -7,9 +6,11 @@ from csv import DictWriter
 from hashlib import sha256
 from dotenv import get_key
 from cryptography.fernet import Fernet
-from random import randint
 from aprender import *
-from utilitarios import limpar_console, get_horario
+from utilitarios import limpar_console, get_horario, simular_carregamento
+from matplotlib import pyplot as plt
+from datetime import datetime
+from random import choice
 
 # Variáveis globais
 usuario = None
@@ -19,6 +20,8 @@ horario_login = None
 FILES_PATH = "./files/"
 USER_DATA_PATH = FILES_PATH + "user_data.json"
 ENV_PATH = FILES_PATH + ".env"
+IDADE_MINIMA_USUARIO = 5
+QUESTOES_POR_QUIZ = 5
 
 
 # ============= ARQUIVO JSON =============
@@ -53,6 +56,8 @@ def get_usuario(cod_aluno: str):
     """
     file_data = descriptografar_json()
     if cod_aluno not in file_data:
+        return None
+    elif cod_aluno in file_data and file_data[cod_aluno]["nome"] == None:
         return None
     return {"RA": cod_aluno, **file_data[cod_aluno]}
 
@@ -162,17 +167,35 @@ def update_json(cod_aluno, usuario):
         file.write(dados_criptografados)
 
 
-def verificar_duplicidade(nome, idade):
-    """Verifica se usuário com mesmo nome e idade já existe no cadastro.
+def verificar_duplicidade(nome, ano_nascimento):
+    """Verifica se usuário com mesmo nome e ano de nascimento já existe no cadastro.
 
     **Retorno**:
         _boolean_: True caso positivo ou False se chegar ao fim do loop sem match.
     """
     file_data = descriptografar_json()
     for usuario in file_data:
-        if file_data[usuario]["nome"] == nome and file_data[usuario]["idade"] == idade:
+        if (
+            file_data[usuario]["nome"] == nome
+            and file_data[usuario]["ano_nascimento"] == ano_nascimento
+        ):
             return True
     return False
+
+
+def get_idade(ano_nascimento) -> int:
+    """
+    Função recebe o ano de nascimento da pessoa e retorna a idade que ela terá após
+    aniversário do ano atual.
+    **Argumentos**:
+        _int_: Ano de nascimento
+
+    **Retorna**
+        _int_: Idade
+    """
+    if ano_nascimento == None:
+        return 0
+    return datetime.now().year - ano_nascimento
 
 
 def cadastro():
@@ -180,7 +203,7 @@ def cadastro():
     usuario = {}
     print("Seja bem-vindo! Faremos seu cadastro a seguir:")
     while True:
-        while True:
+        while True:  # Loop Nome
             nome = input("Insira seu nome com sobrenome: ").title()
             if not nome.replace(" ", "").isalpha():
                 'nome = nome.replace(" ", "")'
@@ -189,35 +212,38 @@ def cadastro():
                 print("Nome muito curto, favor insira um nome válido")
             else:
                 break
-        while True:
-            idade = input(
-                f"Olá {' '.join(nome.split()[:2])}, por favor, insira sua idade: "
+        while True:  # Loop Idade
+            ano_nascimento = input(
+                f"Olá {' '.join(nome.split()[:2])}, por favor, insira seu ano de nascimento, com quatro dígitos: "
             )
-            if not idade.isdecimal():
-                print("Por gentileza, utilize somente números!")
+            if not ano_nascimento.isdecimal() or len(ano_nascimento) != 4:
+                print("Por gentileza, utilize quatro dígitos númericos.")
                 continue
-            idade = int(idade)
-            if idade < 4 or idade > 120:
-                print("Insira uma idade válida!")
+            ano_nascimento = int(ano_nascimento)
+            if (
+                get_idade(ano_nascimento) < IDADE_MINIMA_USUARIO
+                or get_idade(ano_nascimento) > 120
+            ):
+                print("Insira um ano válido!")
             else:
                 limpar_console()
                 break
-        while True:
+        while True:  # Loop Confirmação de dados
             confirmacao_dados = input(
                 f"Verifique os dados inseridos:\nNome: {nome}\n\
-Idade: {idade}\nDigite 'S' para continuar ou 'N' para começar novamente.\n"
+Ano de nascimento: {ano_nascimento}\nDigite 'S' para continuar ou 'N' para começar novamente.\n"
             ).upper()
             if confirmacao_dados in ("S", "N"):
                 break
         if confirmacao_dados == "N":
             continue
-        if verificar_duplicidade(nome, idade):
+        if verificar_duplicidade(nome, ano_nascimento):
             input(
                 "Usuário já cadastrado, faça seu login ou recupere seus dados.\n\
 Aperte ENTER para retornar ao Menu.\n"
             )
             return
-        while True:
+        while True:  # Loop Senha
             senha = input("Insira sua senha: ")
             limpar_console()
             senha2 = input("Insira sua senha novamente, por favor: ")
@@ -239,14 +265,14 @@ especiais, espaços não são válidos."
         usuario = {
             "RA": cod_aluno,
             "nome": nome,
-            "idade": idade,
+            "ano_nascimento": ano_nascimento,
             "senha": senha_hash,
+            "materias": {
+                "ciberseguranca": [],
+                "logica": [],
+                "python": [],
+            },
             "minutos_uso": 0,
-            "qtd_acertos": 0,
-            "qtd_erros": 0,
-            "media_acertos": 0,
-            "media_erros": 0,
-            "media_idade": 0,
             "salt": salt,
         }
         print(
@@ -274,19 +300,86 @@ def hashear_senha(entrada_senha: str, salt: str):
     return objeto_hash.hexdigest()
 
 
-def simular_carregamento(mensagem_carregamento, mensagem_completo):
-    """Função para efeito estético, simula que o programa está carregando
-    **Argumentos:**
-        mensagem_carregamento (_str_): Ex: 'Carregando menu'
-        mensagem_completo (_str_): Ex: 'Menu carregado!'
-    """
-    simbolos = ["\\", "|", "/", "-"] * 4
-    limpar_console()
-    for i in simbolos:
-        print(f"{mensagem_carregamento} {i}")
-        sleep(0.1)
-        limpar_console()
-    print(mensagem_completo)
+def gerar_grafico():
+    # var recebe dict
+    dados_seguros = gerar_dados_seguros()
+
+    # GRAFICO MEDIA DA IDADE
+    eixo_x_idade_aluno = int(get_idade(usuario["ano_nascimento"]))
+
+    print("Idade logado: ", eixo_x_idade_aluno, type(eixo_x_idade_aluno))
+    # calculo média
+    soma_idades = 0
+    soma_minutos = 0
+    quantidade_idades_calculadas = 0
+
+    for user in dados_seguros:
+        idade_usuario = get_idade(dados_seguros[user]["ano_nascimento"])
+        print("Idade usuario no dict: ", idade_usuario, type(idade_usuario))
+
+        if idade_usuario != 0:  # Se usuário não tiver sido anonimizado
+            soma_idades += idade_usuario
+            quantidade_idades_calculadas += 1
+
+        minutos_uso = int(dados_seguros[user]["minutos_uso"])
+        soma_minutos += minutos_uso
+
+    media_minutos = soma_minutos / len(dados_seguros)
+    media_idades = soma_idades / quantidade_idades_calculadas
+
+    print(f"Medias das idades : ", media_idades, type(media_idades))
+
+    print("Media dos minutos: ", media_minutos, type(media_minutos))
+
+    eixo_y_media_idades = media_idades
+    plt.title("Média da sua idade comparada aos outros alunos")
+    # plt.xlabel("Sua idade")
+    plt.ylabel("Idade")
+
+    plt.bar(
+        ["Sua Idade", f"Media das Idades ({quantidade_idades_calculadas} alunos)"],
+        [eixo_x_idade_aluno, eixo_y_media_idades],
+    )
+    plt.show()
+
+    # GRAFICO HORAS TOTAIS
+    print(usuario)
+    eixo_XHoras = int(usuario["minutos_uso"])
+    eixo_YHoras = media_minutos
+    plt.title("Média do seu uso do programa em minutos comparada aos outros alunos")
+    plt.xlabel("Suas horas")
+    plt.ylabel(f"Media dos outros alunos")
+    plt.bar(
+        ["Seu tempo de uso", f"Média geral ({len(dados_seguros)} alunos)"],
+        [eixo_XHoras, eixo_YHoras],
+    )
+    plt.grid(True)
+    plt.show()
+
+    # GRAFICO HISTORICO ACERTOS
+    acertos_python = usuario["materias"]["python"]
+    acertos_logica = usuario["materias"]["logica"]
+    acertos_ciberseguranca = usuario["materias"]["ciberseguranca"]
+    print(acertos_ciberseguranca, acertos_logica, acertos_python)
+    plt.title("Cronograma de notas dos quizzes")
+    plt.plot(acertos_ciberseguranca)
+    plt.plot(acertos_logica, linestyle="dashed")
+    plt.plot(acertos_python, linestyle="dotted")
+    plt.ylim(0, 10.5)
+    plt.legend(["Ciber", "Logica", "Phyton"])
+    plt.ylabel("Nota")
+    plt.xlabel("Tentativas")
+    plt.show()
+
+    all_notas = [5, 5, 5]
+    all_notas.extend(acertos_ciberseguranca)
+    all_notas.extend(acertos_logica)
+    all_notas.extend(acertos_python)
+    # NOTAS       TENTATIVAS      NOTA MAXIMA
+    taxa_acerto = sum(all_notas) / (len(all_notas) * 5)
+    print(taxa_acerto)
+    plt.pie([taxa_acerto, 1 - taxa_acerto])
+    plt.show()
 
 
 def login() -> dict:
@@ -295,19 +388,17 @@ def login() -> dict:
         _dict_: Dicionário com os dados do usuário"""
     global usuario
     global horario_login
-    file_data = descriptografar_json()
-    retorno_usuario = input(
-        "Digite seu RA, ou 'voltar' para retornar ao menu.\n"
-    ).upper()
-    if retorno_usuario == "VOLTAR":
-        return
-    usuario = get_usuario(retorno_usuario)
-    if usuario is None:
-        input(
-            f'RA "{retorno_usuario}" não encontrado, aperte ENTER para retornar ao Menu'
-        )
-        return
-    del file_data
+    while True:
+        retorno_usuario = input(
+            "Digite seu RA, ou 'voltar' para retornar ao menu.\n"
+        ).upper()
+        if retorno_usuario == "VOLTAR":
+            return
+        usuario = get_usuario(retorno_usuario)
+        limpar_console()
+        if usuario:
+            break
+        print("RA inválido. ", end="")
     while True:
         entrada_senha = input(
             f'Olá, {" ".join(usuario["nome"].split()[:2])}! Favor, insira sua senha: '
@@ -415,6 +506,168 @@ especiais, espaços não são válidos."
             return
 
 
+def quiz():
+    global usuario
+    limpar_console()
+    while True:
+        escolha = input(textos.menu_quiz)
+        materias = {1: "logica", 2: "python", 3: "ciberseguranca"}
+        while escolha not in ("1", "2", "3", "4"):
+            limpar_console()
+            escolha = input(textos.menu_quiz)
+        if escolha == "4":
+            return
+        escolha = materias[int(escolha)]
+        variavel_texto_materia = f"questoes_{escolha}"
+        nota = 0
+        for questao, alternativa in getattr(textos, variavel_texto_materia).items():
+            limpar_console()
+            entrada_usuario = input(questao).upper()
+            while entrada_usuario not in ("A", "B", "C", "D", "X"):  # X PENDENTE
+                limpar_console()
+                print("Resposta inválida, utiliza as letras das alternativas.")
+                entrada_usuario = input(questao).upper()
+            if entrada_usuario == alternativa:
+                nota += 1
+                print(
+                    f"{choice(textos.mensagens_resposta_correta).format(entrada_usuario)} \
+\nAperte ENTER para continuar. "
+                )
+                input()
+            else:
+                print(
+                    f"{choice(textos.mensagens_resposta_incorreta).format(entrada_usuario)} \
+\nAperte ENTER para continuar. "
+                )
+                input()
+        input(
+            f"Sua nota total do Quiz de {escolha.title()} foi {nota} de um total de 5 \
+questões.\nAperte ENTER para continuar."
+        )
+        limpar_console()
+        print("Quer fazer outro Quiz ou voltar para o Menu?")
+        usuario["materias"][escolha].append(nota)
+        update_json(usuario["RA"], usuario)
+
+
+def editar_conta():
+    """Imprime menu e através dele, ajuda usuário a editar sua conta, como alterar senha
+    ou anonimizar seus dados.\n
+    Caso usuário informe sua senha incorreta ou escolha anonimizar seus dados, retorna
+    _str_ 'inseguro', com o intuito de indicar para a função origem para fazer o logoff()
+    do usuário atual."""
+    global usuario
+    escolha = None
+    while escolha not in ("1", "2", "3"):
+        limpar_console()
+        escolha = input(textos.menu_conta.format(" ".join(usuario["nome"].split()[:2])))
+    limpar_console()
+    if escolha == "1":  # Mudar senha
+        usuario_completo = get_usuario(usuario["RA"])
+        entrada_senha = input(
+            f'Olá, {" ".join(usuario["nome"].split()[:2])}! Favor, insira sua senha atual: '
+        )
+        limpar_console()
+        senha_hash = hashear_senha(entrada_senha, usuario_completo["salt"])
+        if senha_hash != usuario_completo["senha"]:
+            simular_carregamento(
+                "Senha incorreta, saindo de sua conta...",
+                "Logoff realizado por segurança",
+            )
+            logoff()
+            return "inseguro"
+        while True:  # Loop Senha
+            senha = input("Insira sua nova senha: ")
+            limpar_console()
+            senha2 = input("Insira novamente a nova senha, por favor: ")
+            limpar_console()
+            if senha == senha2:
+                if senha.isascii() and senha.count(" ") == 0 and len(senha) >= 6:
+                    break
+                else:
+                    print(
+                        "Senha inválida, favor utilizar ao menos 6 letras, números e/ou caracteres \
+especiais, espaços não são válidos."
+                    )
+                    continue
+            else:
+                print("Senhas diferentes, insira duas senhas iguais para continuar.")
+        senha_hash = hashear_senha(senha, usuario_completo["salt"])
+        usuario["senha"] = senha_hash
+        update_json(usuario["RA"], usuario)
+        input("Senha alterada com sucesso, aperte ENTER para continuar.")
+
+    elif escolha == "2":  # Anonimização
+        entrada_usuario = input(
+            """
+Somente escolha esta opção caso queira remover os seus dados do sistema de modo que
+todos seus dados pessoais sejam apagados, restando somente suas notas como medida de
+estatística (completamente anônimos).
+Caso esteja decidido(a) a realizar este passo, favor inserir sua senha, ou aperte
+ENTER para voltar: """
+        )
+        usuario_completo = get_usuario(usuario["RA"])
+        senha_hash = hashear_senha(entrada_usuario, usuario_completo["salt"])
+        if senha_hash == usuario_completo["senha"]:
+            confirmacao = input(
+                "\nVOCÊ TER CERTEZA? NÃO SERÁ POSSÍVEL RECUPERAR SUA CONTA!\
+\nDIGITE 'CANCELAR' PARA DESISTIR OU 'ENTER' PARA CONTINUAR: "
+            ).lower()
+            if confirmacao == "cancelar":
+                return
+            usuario["nome"], usuario["ano_nascimento"] = None, None
+            usuario["senha"] = hashear_senha(
+                os.urandom(8).hex(), usuario_completo["salt"]
+            )
+            update_json(usuario["RA"], usuario)
+            usuario = None
+            simular_carregamento("Excluindo dados...", "Dados excluídos!")
+            return "inseguro"
+
+
+def ranking(materia) -> None:
+    """
+    Função destinada a imprimir o ranking da matéria passada como argumento.
+
+    **Argumentos**:
+        _str_: materia
+    """
+    dados_ranking = []
+    for user in descriptografar_json().values():
+        lista_usuario = []
+        for chave, valor in user.items():
+            if chave == "nome":
+                lista_usuario.append(valor)
+            elif chave == "materias":
+                if not valor.get(materia, []):
+                    lista_usuario = [0, " "]
+                else:
+                    lista_usuario.insert(0, (valor[materia][0]))
+        dados_ranking.append(lista_usuario)
+
+    dados_ranking = sorted(dados_ranking, reverse=True)
+    limpar_console()
+    print(f" RANKING {materia.upper()} ".center(40, "="))
+    print(f"Nome".center(26) + " Pontuação".center(14))
+    print(f"|".rjust(27))
+    medalhas = ["🥇 ", "🥈 ", "🥉 "]
+    contagem = 0
+
+    for index in range(0, 9):
+        if index > len(dados_ranking) - 1:
+            print("".ljust(26) + "|")
+        else:
+            if dados_ranking[index][0] == 0:
+                continue
+            print(" ".join(dados_ranking[index][1].split()[:2]).ljust(23, " "), end="")
+            if contagem < 3:
+                print(medalhas[contagem], end="")
+            else:
+                print("   ", end="")
+            print("|" + str(dados_ranking[index][0]).rjust(7))
+            contagem += 1
+
+
 def logoff():
     """Função destinada a contabilizar o tempo que o usuário utilizou o programa e
     incrementar em seus perfil, também define a variável global usuario como None
@@ -429,10 +682,10 @@ def logoff():
 
 def menu_aprender():
     """Menu destinado a escolha de qual lição o usuário quer fazer."""
-    limpar_console()
     while True:
         escolha = None
         while escolha not in ("1", "2", "3", "4"):
+            limpar_console()
             escolha = input(textos.menu_aprender)
         limpar_console()
         if escolha == "1":  # Lógica
@@ -445,31 +698,55 @@ def menu_aprender():
             return
 
 
+def menu_ranking():
+    """Função ao menu para o usuário escolher sobre qual matéria ele quer ver o ranking"""
+    limpar_console()
+    dict_materias = {1: "logica", 2: "python", 3: "ciberseguranca"}
+    escolha = None
+    while escolha not in ("1", "2", "3", "4"):
+        escolha = input(textos.menu_ranking)
+    if escolha == "4":
+        return
+    else:
+        ranking(dict_materias[int(escolha)])
+        input("Aperte enter para voltar ao menu.")
+
+
 def menu_principal():
+    """Menu utilizado quando usuário está logado, ou seja:
+    variável global 'usuario' está com usuário ativo no momento."""
     global usuario
     while True:
         escolha = None
-        while escolha not in ("1", "2", "3", "4", "5"):
+        while escolha not in ("1", "2", "3", "4", "5", "6"):
+            limpar_console()
             escolha = input(
                 textos.menu_principal.format(" ".join(usuario["nome"].split()[:2]))
             )
         if escolha == "1":  # Aprender
             menu_aprender()
         elif escolha == "2":  # Quiz
-            print("Pendente")
+            quiz()
         elif escolha == "3":  # Progresso
-            print("Pendente")
-        elif escolha == "4":  # Logoff
+            gerar_grafico()
+        elif escolha == "4":  # Ranking
+            menu_ranking()
+        elif escolha == "5":  # Editar conta
+            condicao = editar_conta()
+            if condicao == "inseguro":
+                return
+        elif escolha == "6":  # Logoff
             logoff()
             limpar_console()
             return
-        elif escolha == "5":  # Sair
+        elif escolha == "7":  # Sair
             logoff()
             simular_carregamento("Saindo do programa", "Até a próxima!")
             exit()
 
 
 def main():
+    """Menu principal inicial com funções para acessar o programa com sua conta, ou criar uma."""
     criar_env()
     criar_json()
     global usuario
@@ -478,7 +755,7 @@ def main():
         limpar_console()
         if usuario is not None:
             menu_principal()
-        while escolha not in ("1", "2", "3", "4", "5", "6", "7"):
+        while escolha not in ("1", "2", "3", "4", "5"):
             escolha = input(textos.menu_login)
             limpar_console()
         if escolha == "1":
@@ -494,8 +771,8 @@ def main():
             senha = input("Digite a senha de admin: ")
             if senha == get_key(ENV_PATH, "ADMIN_PW"):
                 gerar_dados_seguros()
-                limpar_console()
                 gerar_csv()
+                limpar_console()
 
 
 # Função Quiz ou Menu, quando chamada no fim de qualquer conteuto sobre Python exibe a pergunta para o usuario se ele deseja fazer um quiz sobre o conteudo ou voltar ao menu
