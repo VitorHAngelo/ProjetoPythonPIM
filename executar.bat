@@ -19,6 +19,7 @@ if not exist "files\requirements.txt" (
     echo Criando arquivo 'requirements.txt'...
     echo cryptography > files\requirements.txt
     echo python-dotenv >> files\requirements.txt
+    echo matplotlib >> files\requirements.txt
 )
 
 echo Instalando pacotes do 'requirements.txt'...

@@ -8,17 +8,44 @@ Bem vindo ao menu! Escolha a opção desejada:
 1 - Login
 2 - Criar sua conta
 3 - Recuperar seu login
-4 - Sair (Encerra o programa)\n"""
+4 - Sair (Encerra o programa)
+5 - Administração (Acesso Restrito)\n"""
 
 menu_principal = (
     f"{' Menu Principal '.center(50, '=')}\n"
-    + """
-Bem vindo, {}! Escolha a opção desejada: 
+    + """Bem vindo, {}! Escolha a opção desejada: 
 1 - Aprender (Lições sobre diferentes assuntos)
 2 - Quiz (Teste seus conhecimentos sobre as matérias apresentadas)
 3 - Consulte seu progresso (Confira sua média de acertos ou seus minutos ativo no programa)
-4 - Logout (Sair da sua conta aluno)
-5 - Sair (Encerra o programa)\n"""
+4 - Ranking
+5 - Editar conta
+6 - Logout (Sair da sua conta aluno)
+7 - Sair (Encerra o programa)\n"""
+)
+
+
+menu_conta = (
+    f"{' Editar Conta '.center(50, '=')}\n"
+    + """Olá, {}! Escolha a opção desejada: 
+1 - Mudar sua senha
+2 - Retirar os seus dados do sistema
+3 - Voltar\n"""
+)
+
+menu_ranking = (
+    f"{' Você gostaria ver o ranking de qual assunto? '.center(50, '=')}\n"
+    + """1 - Lógica
+2 - Python
+3 - Cibersegurança
+4 - Voltar\n"""
+)
+
+menu_quiz = (
+    f"{' Escolha um assunto para fazer o QUIZ: '.center(50, '=')}\n"
+    + """1 - Lógica
+2 - Python
+3 - Cibersegurança
+4 - Voltar\n"""
 )
 
 menu_aprender = f"""{' Menu Aprender '.center(50, '=')}\n
@@ -100,10 +127,109 @@ Nessas instruções, podemos passar as mais diferentes instruções, o computado
 e super rápido nisso! Aperte ENTER e escolha alguma opção para ver alguns exemplos:
 """
 
+mensagens_resposta_correta = (
+    "Parabéns! Você acertou, a resposta era {}",
+    "Correto, {} é a resposta certa.",
+    "{} é a resposta certa, boa!",
+    "Você acertou! ({})",
+    "Sim, {} é a resposta.",
+)
+
+mensagens_resposta_incorreta = (
+    "Oops, essa não é a resposta correta.",
+    "Não é bem essa a resposta.",
+    "A resposta não é {}",
+    "Sinto muito, a alternativa {} está errada.",
+    "Resposta incorreta, ops!",
+)
 
 aprender_ciberseguranca = f"""
 aprender_segurança
 """
+
+questoes_ciberseguranca = {
+    """
+Enunciado questão 1?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 2?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 3?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 4?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 5?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+}
+
+questoes_logica = {
+    """
+Enunciado questão 1?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 2?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 3?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 4?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 5?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+}
+
+questoes_python = {
+    """
+Enunciado questão 1?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 2?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 3?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 4?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+    """
+Enunciado questão 5?\n
+A) Alternativa  \nB) Alternativa
+C) Alternativa  \nD) Alternativa
+""": "X",  # Substituir o X pela alternativa CORRETA
+}
 
 # Escrevi na parte de lógica, mas fugiu do assunto;
 """Com a invenção e frequentes avanços da tecnologia e computadores pessoais, foi fundamental

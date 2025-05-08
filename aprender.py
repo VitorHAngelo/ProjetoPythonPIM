@@ -135,7 +135,6 @@ def aprender_logica_par_impar():
 
 def aprender_logica_numeros_iguais():
     while True:
-        limpar_console()
         entrada_um = input(
             "Vou tentar adivinhar um número que você pensou...\nDigite um número de 1 a 3 ou 'sair' para voltar: "
         ).lower()
@@ -146,10 +145,12 @@ def aprender_logica_numeros_iguais():
         except:
             print("Entrada inválida.")
             continue
-
         numero_aleatorio = randint(1, 3)
         if entrada_um == numero_aleatorio:
             print(f"Pensamos juntos no número {entrada_um}!!!")
+        elif entrada_um not in range(1, 4):
+            print("Número inválido.")
+            continue
         else:
             print(f"Pensei em {numero_aleatorio} e você em {entrada_um} hahah.")
         continue

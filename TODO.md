@@ -12,20 +12,21 @@
 - [x] Contagem de minutos de uso
 - [x] Confirmação Nome e Idade
 - [x] Usuários duplicados? nome, idade iguais?
+- [x] Idade por nascimento?
+- [x] Painel de admin não ficar escondido
+- [x] Anonimização
+- [x] Ranking
+- [x] Quiz
 - [o] Aprender (falta Ciber e história do Python)
-- [ ] Ranking
-- [ ] Idade por nascimento?
-- [ ] Quiz
-- [ ]
 - [ ]
 - [ ]
 
 ## 🔹 Gustavo
-- [ ] Em relação a área da matemática, talvez precisamos ter os dados no programa TAMBÉM, pq será que utilizar algum software como LibreOffice não estaria tirando a parte da matemática, visto que as funções fazem tudo sozinhas?
-- [ ] Dashboard com LibreOffice Portable talvez? Tinha pensado em utilizar o Google Docs, mas precisariamos manter conexão com internet na máquina e sincronizado com a nuvem, acho que não compensa.
-- [ ]
-- [ ]
-- [ ]
+- [ ] Dashboard estatísticas do usuário
+- [ ] Dashboard gerais, talvez?
+- [ ] Sobre a taxa_acertos, se pegassemos somente os valores únicos, evitariamos que a pessoa ficasse spamando quiz nota máxima.
+- [ ] pyplot.text()
+- [ ] ax = plt.subplots(); ax.axis('off')
 - [ ]
 - [ ]
 - [ ]
