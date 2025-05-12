@@ -156,11 +156,48 @@ def aprender_logica_numeros_iguais():
         continue
 
 
+def aprender_logica_tabuada():
+    tabuada_escolhida = None
+    quantidade_escolhida = None
+    limpar_console()
+    while True:
+        tabuada_escolhida = input("Digite um número para ver sua tabuada: ")
+        try:
+            tabuada_escolhida = int(tabuada_escolhida)
+            break
+        except:
+            print("Entrada inválida.")
+    limpar_console()
+    while True:
+        quantidade_escolhida = input(
+            f"Você gostaria de ver a tabuada do {tabuada_escolhida} até que número? "
+        )
+        try:
+            quantidade_escolhida = int(quantidade_escolhida)
+            break
+        except:
+            print("Entrada inválida.")
+    limpar_console()
+    print(f"Imprimindo tabuada do {tabuada_escolhida}, do 1 ao {quantidade_escolhida}:")
+    for i in range(1, quantidade_escolhida + 1):
+        print(
+            f"{tabuada_escolhida}".rjust(3, " ")
+            + " x "
+            + f"{i}".ljust(3, " ")
+            + " = "
+            + str(tabuada_escolhida * i)
+        )
+    input(
+        "Este é um exemplo de LOOP, onde o programa irá repetir a tabuada pelo tanto\
+de vezes que você determinou!"
+    )
+
+
 def menu_aprender_logica(textos):
     while True:
         limpar_console()
         escolha = None
-        while escolha not in ("1", "2", "3", "4", "5"):
+        while escolha not in ("1", "2", "3", "4", "5", "6"):
             escolha = input(textos.menu_aprender_logica)
         if escolha == "1":
             input(textos.aprender_logica)
@@ -171,6 +208,8 @@ def menu_aprender_logica(textos):
             aprender_logica_par_impar()
         elif escolha == "4":
             aprender_logica_numeros_iguais()
+        elif escolha == "5":
+            aprender_logica_tabuada()
         else:
             return
 

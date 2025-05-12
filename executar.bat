@@ -1,6 +1,8 @@
 @echo off
 
 color f0
+cd /d %~dp0
+chcp 65001 > nul
 
 if not exist "env" (
     echo Ambiente virtual nao encontrado, criando ambiente...
@@ -28,6 +30,13 @@ echo Instalando pacotes do 'requirements.txt'...
 cls
 
 echo Executando o main.py...
-.\env\Scripts\python.exe main.py
-
-pause
+where wt > nul 2>&1
+if %errorlevel%==0 (
+    wt -d . -p "Command Prompt" cmd /c .\env\Scripts\python.exe main.py
+) else (
+    echo Terminal não instalado, instalação recomendada.
+    echo Aperte ENTER para abrir no CMD...
+    pause > nul
+    .\env\Scripts\python.exe main.py
+    pause
+)

@@ -61,7 +61,8 @@ Escolha uma lição sobre lógica:
 2 - > Qual número é maior?
 3 - > Par ou ímpar?
 4 - > Estamos pensando igual?
-5 - Voltar ao Menu Aprender\n"""
+5 - > Gerar tabuada
+6 - Voltar ao Menu Aprender\n"""
 
 menu_aprender_python = f"""{' Menu Aprender PYTHON '.center(50, '=')}\n
 Escolha uma lição sobre lógica:
@@ -71,6 +72,14 @@ Escolha uma lição sobre lógica:
 4 - Voltar ao Menu Aprender()\n"""
 
 # ============================ APRENDER ============================
+
+aprender_py_historia = """
+Python é uma linguagem de programação, isto é, usamos para passar instruções para o
+computador de como fazer as coisas e os passos que ele deve seguir. Python teve sua 
+primeira versão lançada em 1991 por seu criador Guido van Rossum e até hoje é uma
+linguagem que cresce bastante por ter uma escrita mais fácil para o entendimento,
+especialmente quando comparada a outras. Ainda sim, é uma tecnologia muito poderosa.
+"""
 
 aprender_py_print_um = """
 =============================================================================
@@ -123,8 +132,11 @@ Hoje em dia, tudo que fazemos em nossos computadores e celulares só são possí
 a uma série de instruções que alguém como nós, passou, passo a passo para esse dispositivo.
 O detalhe importante é que ele precisa, diferente de nós humanos, de tudo muito bem
 detalhado, pois irá executar da forma exatamente que foi passada.
-Nessas instruções, podemos passar as mais diferentes instruções, o computador é muito bom
-e super rápido nisso! Aperte ENTER e escolha alguma opção para ver alguns exemplos:
+Nessas instruções, podemos passar grandes listas das mais diferentes instruções, o
+computador é muito bom e super rápido nisso!
+Podemos inclusive pedir para ele fazer algo várias vezes, ou seja, em um loop; ou também
+dizer para repetir um número de vezes!
+Aperte ENTER e escolha alguma opção para ver alguns exemplos:
 """
 
 mensagens_resposta_correta = (
@@ -144,92 +156,147 @@ mensagens_resposta_incorreta = (
 )
 
 aprender_ciberseguranca = f"""
-aprender_segurança
+Cibersegurança é um assunto que é de grande importância que saibamos.
+Como utilizamos muito a internet hoje em dia, é fundamental que tomemos cuidado e
+pensemos várias vezes antes de tomar atitudes online. É muito fácil se passar por 
+outras pessoas na internet, e existem muitas pessoas maldosas que se aproveitam disso;
+Portanto escolha senhas que não sejam fáceis de serem descobertas e não passem para ninguém.
+Não fale com estranhos e desconfie de tudo que te prometer vantagens e benefícios gratuitos.
+Cuidado com suas informações de quem você é, onde mora e com quem.
+O mundo online é muito divertido e poderoso, mas precisamos nos proteger a todo momento!
 """
 
 questoes_ciberseguranca = {
     """
-Enunciado questão 1?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+É seguro compartilhar seu nome completo e endereço com outras pessoas?
+A) Sim, porque todo mundo faz isso  \nB) Não, porque isso é informação pessoal
+C) Somente se a pessoa parecer confiável  \nD) Só se pedirem de forma educada
+""": [
+        "B",
+        "Não devemos compartilhar informações pessoais, porque isso protege nossa segurança.",
+    ],
     """
-Enunciado questão 2?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+O que você deve fazer se um jogo pedir o número do cartão de crédito?
+A) Pegar o cartão dos pais para garantir que o número está certo  \nB) Procurar no Google um número de cartão qualquer
+C) Colocar o número sozinho se você souber  \nD) Pedir para os pais ou responsáveis ajudarem
+""": [
+        "D",
+        "Os adultos precisam ajudar com assuntos de dinheiro online para evitar problemas.\nMesmo que eles não deixem, NUNCA faça isso sem eles, é muito perigoso!",
+    ],
     """
-Enunciado questão 3?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+Como escolher uma senha?
+A) Tentar misturar letras, números e símbolos mas não exagerar para não perder nem esquecer  \nB) Usar a data que você nasceu, para não esquecer
+C) Usar uma sequencia como 12345678 já resolve   \nD) Pedir ajuda para um amigo
+""": [
+        "A",
+        "Uma senha boa mistura letras, números e símbolos, mas DEVE ser FÁCIL DE LEMBRAR.",
+    ],
     """
-Enunciado questão 4?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+É seguro clicar em qualquer link que aparece nos jogos ou vídeos?
+A) Sim, se o link for enviado por alguém que você conhece no jogo  \nB) Não, porque alguns links podem ter vírus ou enganar você
+C) Só se o link dar prêmios ou moedas no jogo  \nD) Sim, porque todo link na internet é seguro
+""": [
+        "B",
+        "Links desconhecidos podem conter vírus ou enganar você. Sempre tenha cuidado!",
+    ],
     """
-Enunciado questão 5?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+O que você deve fazer se alguém estranho mandar mensagem pelo jogo ou celular?
+A) Se conhecer melhor para ver se a pessoa é confiável  \nB) Responder para fazer novas amizades
+C) Contar para um adulto de confiança  \nD) Trocar fotos para ver se a pessoa existe mesmo
+""": [
+        "C",
+        "Sempre devemos desconfiar de todas as pessoas que falamos na internet, é muito fácil uma pessoa se passar por outra..",
+    ],
 }
 
 questoes_logica = {
     """
-Enunciado questão 1?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+"Lógica de programação só serve para computador. Celular e outros aparelhos não precisam."
+Está correta essa afirmação?
+A) Sim, os estes outros aparelhos são mais modernos  \nB) Não, todos os dispositivos usam lógica
+C) Depende, somente se o dispositivo tiver teclado  \nD) Nenhuma das opções
+""": [
+        "B",
+        "Celulares, videogames e outros aparelhos também precisam de lógica para funcionar.",
+    ],
     """
-Enunciado questão 2?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+O que um "algoritmo" faz?
+A) Instala um aplicativo ou programa  \nB) Ensina o computador a desenhar
+C) Dá uma sequência de instruções para o computador seguir  \nD) Organiza uma lista de músicas
+""": [
+        "C",
+        "Um algoritmo é uma sequência de passos que o computador segue para resolver um problema.",
+    ],
     """
-Enunciado questão 3?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+Se passarmos uma sequência de instruções para o computador, como ele irá fazer?
+A) Vai seguir a ordem que quiser  \nB) Fazer as mais fáceis primeiro
+C) Irá seguir na ordem que foi passada  \nD) Só se pode passar um comando por vez
+""": [
+        "C",
+        "O computador segue as instruções exatamente na ordem em que foram dadas.",
+    ],
     """
-Enunciado questão 4?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+O que significa um LOOP em programação?
+A) Repetir algo sem parar  \nB) Quando pedimos para ele trocar o que está fazendo
+C) Um tipo de erro  \nD) Quando pedimos para ele fechar
+""": [
+        "A",
+        "Um loop serve para repetir uma ação várias vezes.",
+    ],
     """
-Enunciado questão 5?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+Se pedirmos para ele fazer uma conta muito difícil de matemática, o que aconteceria?
+A) Ele não sabe fazer contas de matemática  \nB) Ele só pode fazer uma conta de cada vez
+C) Somente se usar uma linguagem de programação de matemática  \nD) Ele fará sem problemas
+""": [
+        "D",
+        "O computador consegue fazer contas muito difíceis rapidamente.",
+    ],
 }
 
 questoes_python = {
     """
-Enunciado questão 1?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+O que o comando print() executa em Python?
+A) Recebe dados do usuário  \nB) Compara dois números
+C) Mostra mensagem ou informação na tela  \nD) Pede para o usuário enviar algum dado
+""": [
+        "C",
+        "O comando print() serve para mostrar textos, números ou mensagens na tela.",
+    ],
     """
-Enunciado questão 2?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+O que acontece se você escrever print(Olá) (sem aspas)?
+A) Vai imprimir a palavra Olá corretamente  \nB) Vai dar erro, pois Olá não está entre aspas
+C) Vai pedir para o usuário digitar algo  \nD) Vai imprimir 'print(Olá)'
+""": [
+        "B",
+        "Vai dar erro, porque textos precisam estar entre aspas para o Python entender.",
+    ],
     """
-Enunciado questão 3?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+O que acontece quando passamos o comando abaixo em Python?
+input("Digite sua idade: ")
+A) O computador irá exibir a idade da pessoa  \nB) A idade aparece sozinha
+C) A pessoa digita a idade e o computador recebe essa informação  \nD) Nada irá acontecer
+""": [
+        "C",
+        "O comando input() faz o computador esperar que a pessoa digite alguma informação.",
+    ],
     """
-Enunciado questão 4?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+O que é Python?
+A) Uma linguagem de programação  \nB) Um idioma
+C) Um jogo de computador  \nD) Um personagem de filme
+""": [
+        "A",
+        "Python é uma linguagem usada para criar programas de computador.",
+    ],
     """
-Enunciado questão 5?\n
-A) Alternativa  \nB) Alternativa
-C) Alternativa  \nD) Alternativa
-""": "X",  # Substituir o X pela alternativa CORRETA
+Para que serve uma linguagem de programação?
+A) Para ouvir músicas no computador  \nB) Para deixar o computador mais rápido
+C) Para ensinar outros idiomas para o computador  \nD) Para passar informações para o computador de como fazer as coisas
+""": [
+        "D",
+        "Com a linguagem de programação, dizemos ao computador o que ele deve fazer e como fazer.",
+    ],
 }
+
 
 # Escrevi na parte de lógica, mas fugiu do assunto;
 """Com a invenção e frequentes avanços da tecnologia e computadores pessoais, foi fundamental
