@@ -34,7 +34,7 @@ where wt > nul 2>&1
 if %errorlevel%==0 (
     wt -d . -p "Command Prompt" cmd /c .\env\Scripts\python.exe main.py
 ) else (
-    echo Terminal não instalado, instalação recomendada.
+    echo Terminal nao instalado, instalacao recomendada.
     echo Aperte ENTER para abrir no CMD...
     pause > nul
     .\env\Scripts\python.exe main.py
