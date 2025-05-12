@@ -17,9 +17,10 @@
 - [x] Anonimização
 - [x] Ranking
 - [x] Quiz
-- [o] Aprender (falta Ciber e história do Python)
-- [ ]
-- [ ]
+- [x] Implementar ordem no cadastro e incrementar no quiz
+- [x] Trocar primeira nota por maior no ranking
+- [x] Aprender
+- [ ] Escalabilidade, um script que une CSV's
 
 ## 🔹 Gustavo
 - [ ] Dashboard estatísticas do usuário

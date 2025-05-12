@@ -20,6 +20,7 @@ horario_login = None
 FILES_PATH = "./files/"
 USER_DATA_PATH = FILES_PATH + "user_data.json"
 ENV_PATH = FILES_PATH + ".env"
+CONTADOR_QUIZ = "contador_quiz.json"
 IDADE_MINIMA_USUARIO = 5
 QUESTOES_POR_QUIZ = 5
 
@@ -92,6 +93,12 @@ def gerar_dados_seguros() -> dict:
 
 
 def criar_env():
+    """Verifica se o arquivo .env (que guarda variáveis importantes do programa em um
+    arquivo oculto para maior segurança, arquivo este que nunca deve ser enviado para
+    o repositório, por questões de segurança, ou seja, é sempre gerado um novo na
+    primeira execução em um ambiente novo).
+    Caso o arquivo não exista, ele cria e gera novas chaves fernet e pepper para o mesmo.
+    """
     if not os.path.exists("files/.env"):
         pepper = os.urandom(8).hex()
         fernet_key = Fernet.generate_key().decode()
@@ -236,6 +243,7 @@ Ano de nascimento: {ano_nascimento}\nDigite 'S' para continuar ou 'N' para come�
             if confirmacao_dados in ("S", "N"):
                 break
         if confirmacao_dados == "N":
+            limpar_console()
             continue
         if verificar_duplicidade(nome, ano_nascimento):
             input(
@@ -507,6 +515,10 @@ especiais, espaços não são válidos."
 
 
 def quiz():
+    """Função destinada a atividade QUIZ do programa, onde testa os conhecimentos do
+    usuário com base no que foi ensinado na parte de #Aprender.
+    Constituídos por 5 questões cada quiz, apresenta a resposta correta ao usuário,
+    adiciona o resultado de sua pontuação ao próprio perfil."""
     global usuario
     limpar_console()
     while True:
@@ -523,21 +535,21 @@ def quiz():
         for questao, alternativa in getattr(textos, variavel_texto_materia).items():
             limpar_console()
             entrada_usuario = input(questao).upper()
-            while entrada_usuario not in ("A", "B", "C", "D", "X"):  # X PENDENTE
+            while entrada_usuario not in ("A", "B", "C", "D"):  # X PENDENTE
                 limpar_console()
                 print("Resposta inválida, utiliza as letras das alternativas.")
                 entrada_usuario = input(questao).upper()
-            if entrada_usuario == alternativa:
+            if entrada_usuario == alternativa[0]:
                 nota += 1
                 print(
                     f"{choice(textos.mensagens_resposta_correta).format(entrada_usuario)} \
-\nAperte ENTER para continuar. "
+\n{alternativa[1]}\nAperte ENTER para continuar. "
                 )
                 input()
             else:
                 print(
                     f"{choice(textos.mensagens_resposta_incorreta).format(entrada_usuario)} \
-\nAperte ENTER para continuar. "
+\n{alternativa[1]}\nAperte ENTER para continuar. "
                 )
                 input()
         input(
@@ -546,7 +558,8 @@ questões.\nAperte ENTER para continuar."
         )
         limpar_console()
         print("Quer fazer outro Quiz ou voltar para o Menu?")
-        usuario["materias"][escolha].append(nota)
+        contador = contador_quiz()
+        usuario["materias"][escolha].append([nota, contador])
         update_json(usuario["RA"], usuario)
 
 
@@ -718,7 +731,7 @@ def menu_principal():
     global usuario
     while True:
         escolha = None
-        while escolha not in ("1", "2", "3", "4", "5", "6"):
+        while escolha not in ("1", "2", "3", "4", "5", "6", "7"):
             limpar_console()
             escolha = input(
                 textos.menu_principal.format(" ".join(usuario["nome"].split()[:2]))
@@ -775,25 +788,25 @@ def main():
                 limpar_console()
 
 
-# Função Quiz ou Menu, quando chamada no fim de qualquer conteuto sobre Python exibe a pergunta para o usuario se ele deseja fazer um quiz sobre o conteudo ou voltar ao menu
-def quizOUmenu():
-    print("\nDeseja fazer um Quiz sobre o conteúdo estudado ou voltar ao menu? ")
-    global escolha
-    escolha = input("Digite 1 para o Quiz e 2 para voltar ao menu: ")
-    return
+# # Função Quiz ou Menu, quando chamada no fim de qualquer conteudo sobre Python exibe a pergunta para o usuario se ele deseja fazer um quiz sobre o conteudo ou voltar ao menu
+# def quizOUmenu():
+#     print("\nDeseja fazer um Quiz sobre o conteúdo estudado ou voltar ao menu? ")
+#     global escolha
+#     escolha = input("Digite 1 para o Quiz e 2 para voltar ao menu: ")
+#     return
 
 
-# Função sair. Quando chamada exibe a pergunta se o usuario realmente deseja sair do programa
-def Sair():
-    print("\nVocê escolheu sair do programa, tem certeza que deseja sair? ")
-    ver = str(input("Digite sim para sair e não para voltar ao menu\n"))
-    if ver.lower() == "sim":
-        print("Encerrando o Programa. . .")
-    elif ver.lower() == "não":
-        pass
-    else:
-        print("\nA opção escolhida é invalida, Digite conforme orientado.")
-    return
+# # Função sair. Quando chamada exibe a pergunta se o usuario realmente deseja sair do programa
+# def Sair():
+#     print("\nVocê escolheu sair do programa, tem certeza que deseja sair? ")
+#     ver = str(input("Digite sim para sair e não para voltar ao menu\n"))
+#     if ver.lower() == "sim":
+#         print("Encerrando o Programa. . .")
+#     elif ver.lower() == "não":
+#         pass
+#     else:
+#         print("\nA opção escolhida é invalida, Digite conforme orientado.")
+#     return
 
 
 # função onde está a estrutura condicional do programa
@@ -840,7 +853,7 @@ def Ifs():
                 "incluindo textos(strings), números, resultados de operações ou qualquer outro objeto dentro de Python."
             )
             print("O conteúdo será sempre convertido a uma string para ser exibido.")
-            quizOUmenu()
+            # quizOUmenu()
             if escolha == "1":
                 print("\nIndentifique o erro de sintaxe no seguinte comando: ")
                 print('print("Hello, World)')
@@ -884,7 +897,7 @@ def Ifs():
             print(
                 "É possível fazer validações para verificar se o utilizador digitou algo ou não."
             )
-            quizOUmenu()
+            # quizOUmenu()
             if escolha == "1":
                 print("\nO seguinte o comando esta dando erro:")
                 print("int(input(input(" "Digite sua senha" "))" "")
@@ -979,7 +992,8 @@ def Ifs():
     elif escolha == "4":
         login()
     elif escolha == "5":
-        Sair()
+        # Sair()
+        pass
     else:
         print("\nOpção invalida\n")
     return
