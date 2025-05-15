@@ -601,6 +601,7 @@ questões.\nAperte ENTER para continuar."
         print("Quer fazer outro Quiz ou voltar para o Menu?")
         usuario["materias"][escolha].append(nota)
         update_json(usuario["RA"], usuario)
+        usuario = get_usuario(usuario["RA"])
 
 
 def editar_conta():

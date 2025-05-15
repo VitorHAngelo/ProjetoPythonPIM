@@ -62,7 +62,8 @@ Escolha uma lição sobre lógica:
 3 - > Par ou ímpar?
 4 - > Estamos pensando igual?
 5 - > Gerar tabuada
-6 - Voltar ao Menu Aprender\n"""
+6 - > Inversão de texto
+7 - Voltar ao Menu Aprender\n"""
 
 menu_aprender_python = f"""{' Menu Aprender PYTHON '.center(50, '=')}\n
 Escolha uma lição sobre lógica:

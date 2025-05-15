@@ -193,11 +193,18 @@ de vezes que você determinou!"
     )
 
 
+def aprender_logica_inversao():
+    entrada_usuario = input(
+        "Para demonstrar como podemos inverter um texto, por favor, digite algumas palavras: "
+    )
+    print(entrada_usuario[::-1])
+
+
 def menu_aprender_logica(textos):
     while True:
         limpar_console()
         escolha = None
-        while escolha not in ("1", "2", "3", "4", "5", "6"):
+        while escolha not in ("1", "2", "3", "4", "5", "6", "7"):
             escolha = input(textos.menu_aprender_logica)
         limpar_console()
         if escolha == "1":
@@ -211,6 +218,8 @@ def menu_aprender_logica(textos):
             aprender_logica_numeros_iguais()
         elif escolha == "5":
             aprender_logica_tabuada()
+        elif escolha == "6":
+            aprender_logica_inversao()
         else:
             return
 
