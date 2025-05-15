@@ -199,6 +199,7 @@ def menu_aprender_logica(textos):
         escolha = None
         while escolha not in ("1", "2", "3", "4", "5", "6"):
             escolha = input(textos.menu_aprender_logica)
+        limpar_console()
         if escolha == "1":
             input(textos.aprender_logica)
             continue
@@ -218,14 +219,19 @@ def menu_aprender_python(textos):
     while True:
         limpar_console()
         escolha = None
-        while escolha not in ("1", "2", "3", "4"):
+        while escolha not in ("1", "2", "3", "4", "5"):
             escolha = input(textos.menu_aprender_python)
+        limpar_console()
         if escolha == "1":  # O que é Python
-            print("aprender_python")
+            print(textos.aprender_py_historia)
             continue
         elif escolha == "2":  # Aprender print()
             aprender_python_print(textos)
         elif escolha == "3":  # Aprender input()
             aprender_python_input(textos)
+        elif escolha == "4":
+            input(textos.aprender_py_variavel_um)
+            limpar_console()
+            input(textos.aprender_py_variavel_dois)
         else:
             break

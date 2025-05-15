@@ -23,11 +23,11 @@
 - [ ] Escalabilidade, um script que une CSV's
 
 ## 🔹 Gustavo
-- [ ] Dashboard estatísticas do usuário
+- [x] Dashboard estatísticas do usuário
 - [ ] Dashboard gerais, talvez?
 - [ ] Sobre a taxa_acertos, se pegassemos somente os valores únicos, evitariamos que a pessoa ficasse spamando quiz nota máxima.
-- [ ] pyplot.text()
-- [ ] ax = plt.subplots(); ax.axis('off')
+- [ ]
+- [ ] 
 - [ ]
 - [ ]
 - [ ]

@@ -309,13 +309,16 @@ def hashear_senha(entrada_senha: str, salt: str):
 
 
 def gerar_grafico():
+    # Criando subplots
+    fig, ax1 = plt.subplots(nrows=2, ncols=2, figsize=(14, 9))
+    fig.set_facecolor("lightgray")
+    fig.suptitle("Representação gráfica do seu progresso em nosso programa!")
     # var recebe dict
     dados_seguros = gerar_dados_seguros()
 
     # GRAFICO MEDIA DA IDADE
-    eixo_x_idade_aluno = int(get_idade(usuario["ano_nascimento"]))
+    idade_aluno = int(get_idade(usuario["ano_nascimento"]))
 
-    print("Idade logado: ", eixo_x_idade_aluno, type(eixo_x_idade_aluno))
     # calculo média
     soma_idades = 0
     soma_minutos = 0
@@ -323,7 +326,6 @@ def gerar_grafico():
 
     for user in dados_seguros:
         idade_usuario = get_idade(dados_seguros[user]["ano_nascimento"])
-        print("Idade usuario no dict: ", idade_usuario, type(idade_usuario))
 
         if idade_usuario != 0:  # Se usuário não tiver sido anonimizado
             soma_idades += idade_usuario
@@ -332,61 +334,100 @@ def gerar_grafico():
         minutos_uso = int(dados_seguros[user]["minutos_uso"])
         soma_minutos += minutos_uso
 
-    media_minutos = soma_minutos / len(dados_seguros)
+    media_minutos = int(soma_minutos / len(dados_seguros))
     media_idades = soma_idades / quantidade_idades_calculadas
 
-    print(f"Medias das idades : ", media_idades, type(media_idades))
+    posicao = [0, 6]
+    rotulos = [
+        "Sua Idade",
+        f"Media das Idades ({quantidade_idades_calculadas} alunos)",
+    ]
 
-    print("Media dos minutos: ", media_minutos, type(media_minutos))
-
-    eixo_y_media_idades = media_idades
-    plt.title("Média da sua idade comparada aos outros alunos")
-    # plt.xlabel("Sua idade")
-    plt.ylabel("Idade")
-
-    plt.bar(
-        ["Sua Idade", f"Media das Idades ({quantidade_idades_calculadas} alunos)"],
-        [eixo_x_idade_aluno, eixo_y_media_idades],
+    ax1[0, 0].bar(
+        posicao,
+        [idade_aluno, media_idades],
+        color="green",
+        label="Idade",
+        align="center",
+        width=3,
     )
-    plt.show()
+    ax1[0, 0].set_facecolor("lightgray")
+    ax1[0, 0].set_xticks(posicao, rotulos)
+    ax1[0, 0].set_title("Sua idade comparada a idade média dos outros alunos")
+    ax1[0, 0].set_ylabel("Idade")
 
     # GRAFICO HORAS TOTAIS
-    print(usuario)
-    eixo_XHoras = int(usuario["minutos_uso"])
-    eixo_YHoras = media_minutos
-    plt.title("Média do seu uso do programa em minutos comparada aos outros alunos")
-    plt.xlabel("Suas horas")
-    plt.ylabel(f"Media dos outros alunos")
-    plt.bar(
-        ["Seu tempo de uso", f"Média geral ({len(dados_seguros)} alunos)"],
-        [eixo_XHoras, eixo_YHoras],
+
+    minutos_uso_usuario = int(usuario["minutos_uso"])
+
+    posicao_grafico_minutos_totais = [0, 6]
+    rotulos_grafico_minutos_totais = [
+        "Seu tempo de uso",
+        f"Media Geral de tempo de uso ({len(dados_seguros)} alunos)",
+    ]
+
+    media_minutos = 48
+    ax1[0, 1].bar(
+        posicao_grafico_minutos_totais,
+        [minutos_uso_usuario, media_minutos],
+        align="center",
+        width=3,
     )
-    plt.grid(True)
-    plt.show()
+    # Calcular yticks:
+    maior_tempo = max([minutos_uso_usuario, media_minutos])
+    maior_tempo += 10 - (maior_tempo % 10)
+
+    ax1[0, 1].set_xticks(posicao_grafico_minutos_totais, rotulos_grafico_minutos_totais)
+    ax1[0, 1].set_yticks(range(0, maior_tempo + 1, 5))
+    ax1[0, 1].set_facecolor("lightgray")
+    ax1[0, 1].set_title("Seu tempo de uso do programa comparado a média dos alunos")
+    ax1[0, 1].set_ylabel("Média de uso (minutos)")
 
     # GRAFICO HISTORICO ACERTOS
     acertos_python = usuario["materias"]["python"]
     acertos_logica = usuario["materias"]["logica"]
     acertos_ciberseguranca = usuario["materias"]["ciberseguranca"]
-    print(acertos_ciberseguranca, acertos_logica, acertos_python)
-    plt.title("Cronograma de notas dos quizzes")
-    plt.plot(acertos_ciberseguranca)
-    plt.plot(acertos_logica, linestyle="dashed")
-    plt.plot(acertos_python, linestyle="dotted")
-    plt.ylim(0, 10.5)
-    plt.legend(["Ciber", "Logica", "Phyton"])
-    plt.ylabel("Nota")
-    plt.xlabel("Tentativas")
-    plt.show()
 
-    all_notas = [5, 5, 5]
+    total_tentativas = max(
+        [len(acertos_python), len(acertos_ciberseguranca), len(acertos_logica)]
+    )
+
+    if not total_tentativas:
+        total_tentativas = 1
+
+    ax1[1, 0].plot(acertos_ciberseguranca, label="Cibersegurança", marker="o")
+    ax1[1, 0].plot(acertos_logica, linestyle="dashed", label="Lógica", marker="o")
+    ax1[1, 0].plot(acertos_python, linestyle="dotted", label="Python", marker="o")
+    ax1[1, 0].set_facecolor("lightgray")
+    ax1[1, 0].set_title("Cronograma de notas dos quizzes")
+    ax1[1, 0].set_ylim(0, 5.5)
+    ax1[1, 0].set_xticks(ticks=range(0, total_tentativas + 1))
+    ax1[1, 0].hlines(
+        y=[range(0, 6)], xmin=0, xmax=total_tentativas, color="tab:gray", alpha=0.2
+    )
+
+    ax1[1, 0].legend(facecolor="gainsboro")
+    ax1[1, 0].set_ylabel("Nota")
+    ax1[1, 0].set_xlabel("Tentativas")
+
+    # GRAFICO TAXA DE ACERTO
+    all_notas = []
     all_notas.extend(acertos_ciberseguranca)
     all_notas.extend(acertos_logica)
     all_notas.extend(acertos_python)
-    # NOTAS       TENTATIVAS      NOTA MAXIMA
+
+    #                 NOTAS       TENTATIVAS      NOTA MAXIMA
+    pie_labels = ["Taxa de acertos", "Taxa de erros"]
     taxa_acerto = sum(all_notas) / (len(all_notas) * 5)
-    print(taxa_acerto)
-    plt.pie([taxa_acerto, 1 - taxa_acerto])
+    ax1[1, 1].pie(
+        [taxa_acerto, 1 - taxa_acerto],
+        autopct="%1.1f%%",
+        labels=pie_labels,
+    )
+    ax1[1, 1].set_title("Sua taxa de acerto de questões")
+    ax1[1, 1].set_facecolor("lightgray")
+    # ax1[1, 1].set_xlabel("Acertos")
+    # ax1[1, 1].set_ylabel("Erros")
     plt.show()
 
 
@@ -535,7 +576,7 @@ def quiz():
         for questao, alternativa in getattr(textos, variavel_texto_materia).items():
             limpar_console()
             entrada_usuario = input(questao).upper()
-            while entrada_usuario not in ("A", "B", "C", "D"):  # X PENDENTE
+            while entrada_usuario not in ("A", "B", "C", "D"):
                 limpar_console()
                 print("Resposta inválida, utiliza as letras das alternativas.")
                 entrada_usuario = input(questao).upper()
@@ -558,8 +599,7 @@ questões.\nAperte ENTER para continuar."
         )
         limpar_console()
         print("Quer fazer outro Quiz ou voltar para o Menu?")
-        contador = contador_quiz()
-        usuario["materias"][escolha].append([nota, contador])
+        usuario["materias"][escolha].append(nota)
         update_json(usuario["RA"], usuario)
 
 
@@ -707,6 +747,7 @@ def menu_aprender():
             menu_aprender_python(textos)
         elif escolha == "3":  # Cibersegurança
             print(textos.aprender_ciberseguranca)
+            input("Aperte ENTER para voltar.")
         elif escolha == "4":  # Voltar
             return
 

@@ -66,10 +66,11 @@ Escolha uma lição sobre lógica:
 
 menu_aprender_python = f"""{' Menu Aprender PYTHON '.center(50, '=')}\n
 Escolha uma lição sobre lógica:
-1 - > O que é Python
+1 - > O que é Python?
 2 - > Função print()
 3 - > Função input()
-4 - Voltar ao Menu Aprender()\n"""
+4 - > O que é uma variável?
+5 - Voltar ao Menu Aprender()\n"""
 
 # ============================ APRENDER ============================
 
@@ -79,6 +80,27 @@ computador de como fazer as coisas e os passos que ele deve seguir. Python teve 
 primeira versão lançada em 1991 por seu criador Guido van Rossum e até hoje é uma
 linguagem que cresce bastante por ter uma escrita mais fácil para o entendimento,
 especialmente quando comparada a outras. Ainda sim, é uma tecnologia muito poderosa.
+"""
+
+aprender_py_variavel_um = """
+Chamamos de variável um espacinho na memória do computador em que podemos indicar que
+queremos guardar alguma informação, seja algum texto, ou número por exemplo.
+Vamos supor que eu queira guardar a palavra Brasil em uma variável em Python, para isso
+devemos dar um nome para essa variável, para conseguirmos saber como chamar este espaço
+na memória quando precisarmos. No nosso caso, faremos:
+pais = 'Brasil'
+pais é um bom nome para a variável, já que guardaremos o nome de um País dentro dela.
+Aperte ENTER para continuar...
+"""
+
+aprender_py_variavel_dois = """
+pais = 'Brasil'
+Então entendemos que pais é nossa variável, depois dela, estamos indicando para Python
+com o símbolo de igual (=) que queremos guardar nela alguma coisa, e em seguida estamos
+mostrando o que deve ser guardado; no nosso caso o nome Brasil.
+Ele está entre as aspas 'Brasil' pois estamos indicando que não se trata de um código e
+sim um texto, e é assim que ele guarda textos!
+Aperte ENTER para retornar ao Menu.
 """
 
 aprender_py_print_um = """
@@ -168,7 +190,7 @@ O mundo online é muito divertido e poderoso, mas precisamos nos proteger a todo
 
 questoes_ciberseguranca = {
     """
-É seguro compartilhar seu nome completo e endereço com outras pessoas?
+É seguro compartilhar seu nome completo e endereço com outras pessoas?\n
 A) Sim, porque todo mundo faz isso  \nB) Não, porque isso é informação pessoal
 C) Somente se a pessoa parecer confiável  \nD) Só se pedirem de forma educada
 """: [
@@ -176,7 +198,7 @@ C) Somente se a pessoa parecer confiável  \nD) Só se pedirem de forma educada
         "Não devemos compartilhar informações pessoais, porque isso protege nossa segurança.",
     ],
     """
-O que você deve fazer se um jogo pedir o número do cartão de crédito?
+O que você deve fazer se um jogo pedir o número do cartão de crédito?\n
 A) Pegar o cartão dos pais para garantir que o número está certo  \nB) Procurar no Google um número de cartão qualquer
 C) Colocar o número sozinho se você souber  \nD) Pedir para os pais ou responsáveis ajudarem
 """: [
@@ -184,7 +206,7 @@ C) Colocar o número sozinho se você souber  \nD) Pedir para os pais ou respons
         "Os adultos precisam ajudar com assuntos de dinheiro online para evitar problemas.\nMesmo que eles não deixem, NUNCA faça isso sem eles, é muito perigoso!",
     ],
     """
-Como escolher uma senha?
+Como escolher uma senha?\n
 A) Tentar misturar letras, números e símbolos mas não exagerar para não perder nem esquecer  \nB) Usar a data que você nasceu, para não esquecer
 C) Usar uma sequencia como 12345678 já resolve   \nD) Pedir ajuda para um amigo
 """: [
@@ -192,7 +214,7 @@ C) Usar uma sequencia como 12345678 já resolve   \nD) Pedir ajuda para um amigo
         "Uma senha boa mistura letras, números e símbolos, mas DEVE ser FÁCIL DE LEMBRAR.",
     ],
     """
-É seguro clicar em qualquer link que aparece nos jogos ou vídeos?
+É seguro clicar em qualquer link que aparece nos jogos ou vídeos?\n
 A) Sim, se o link for enviado por alguém que você conhece no jogo  \nB) Não, porque alguns links podem ter vírus ou enganar você
 C) Só se o link dar prêmios ou moedas no jogo  \nD) Sim, porque todo link na internet é seguro
 """: [
@@ -200,8 +222,8 @@ C) Só se o link dar prêmios ou moedas no jogo  \nD) Sim, porque todo link na i
         "Links desconhecidos podem conter vírus ou enganar você. Sempre tenha cuidado!",
     ],
     """
-O que você deve fazer se alguém estranho mandar mensagem pelo jogo ou celular?
-A) Se conhecer melhor para ver se a pessoa é confiável  \nB) Responder para fazer novas amizades
+O que você deve fazer se alguém estranho mandar mensagem pelo jogo ou celular?\n
+A) Se conhecerem melhor para ver se a pessoa é confiável  \nB) Responder para fazer novas amizades
 C) Contar para um adulto de confiança  \nD) Trocar fotos para ver se a pessoa existe mesmo
 """: [
         "C",
@@ -211,7 +233,7 @@ C) Contar para um adulto de confiança  \nD) Trocar fotos para ver se a pessoa e
 
 questoes_logica = {
     """
-"Lógica de programação só serve para computador. Celular e outros aparelhos não precisam."
+"Lógica de programação só serve para computador. Celular e outros aparelhos não precisam."\n
 Está correta essa afirmação?
 A) Sim, os estes outros aparelhos são mais modernos  \nB) Não, todos os dispositivos usam lógica
 C) Depende, somente se o dispositivo tiver teclado  \nD) Nenhuma das opções
@@ -220,7 +242,7 @@ C) Depende, somente se o dispositivo tiver teclado  \nD) Nenhuma das opções
         "Celulares, videogames e outros aparelhos também precisam de lógica para funcionar.",
     ],
     """
-O que um "algoritmo" faz?
+O que um "algoritmo" faz?\n
 A) Instala um aplicativo ou programa  \nB) Ensina o computador a desenhar
 C) Dá uma sequência de instruções para o computador seguir  \nD) Organiza uma lista de músicas
 """: [
@@ -228,7 +250,7 @@ C) Dá uma sequência de instruções para o computador seguir  \nD) Organiza um
         "Um algoritmo é uma sequência de passos que o computador segue para resolver um problema.",
     ],
     """
-Se passarmos uma sequência de instruções para o computador, como ele irá fazer?
+Se passarmos uma sequência de instruções para o computador, como ele irá fazer?\n
 A) Vai seguir a ordem que quiser  \nB) Fazer as mais fáceis primeiro
 C) Irá seguir na ordem que foi passada  \nD) Só se pode passar um comando por vez
 """: [
@@ -236,7 +258,7 @@ C) Irá seguir na ordem que foi passada  \nD) Só se pode passar um comando por 
         "O computador segue as instruções exatamente na ordem em que foram dadas.",
     ],
     """
-O que significa um LOOP em programação?
+O que significa um LOOP em programação?\n
 A) Repetir algo sem parar  \nB) Quando pedimos para ele trocar o que está fazendo
 C) Um tipo de erro  \nD) Quando pedimos para ele fechar
 """: [
@@ -244,7 +266,7 @@ C) Um tipo de erro  \nD) Quando pedimos para ele fechar
         "Um loop serve para repetir uma ação várias vezes.",
     ],
     """
-Se pedirmos para ele fazer uma conta muito difícil de matemática, o que aconteceria?
+Se pedirmos para ele fazer uma conta muito difícil de matemática, o que aconteceria?\n
 A) Ele não sabe fazer contas de matemática  \nB) Ele só pode fazer uma conta de cada vez
 C) Somente se usar uma linguagem de programação de matemática  \nD) Ele fará sem problemas
 """: [
@@ -255,7 +277,7 @@ C) Somente se usar uma linguagem de programação de matemática  \nD) Ele fará
 
 questoes_python = {
     """
-O que o comando print() executa em Python?
+O que o comando print() executa em Python?\n
 A) Recebe dados do usuário  \nB) Compara dois números
 C) Mostra mensagem ou informação na tela  \nD) Pede para o usuário enviar algum dado
 """: [
@@ -263,7 +285,7 @@ C) Mostra mensagem ou informação na tela  \nD) Pede para o usuário enviar alg
         "O comando print() serve para mostrar textos, números ou mensagens na tela.",
     ],
     """
-O que acontece se você escrever print(Olá) (sem aspas)?
+O que acontece se você escrever print(Olá) (sem aspas)?\n
 A) Vai imprimir a palavra Olá corretamente  \nB) Vai dar erro, pois Olá não está entre aspas
 C) Vai pedir para o usuário digitar algo  \nD) Vai imprimir 'print(Olá)'
 """: [
@@ -271,7 +293,7 @@ C) Vai pedir para o usuário digitar algo  \nD) Vai imprimir 'print(Olá)'
         "Vai dar erro, porque textos precisam estar entre aspas para o Python entender.",
     ],
     """
-O que acontece quando passamos o comando abaixo em Python?
+O que acontece quando passamos o comando abaixo em Python?\n
 input("Digite sua idade: ")
 A) O computador irá exibir a idade da pessoa  \nB) A idade aparece sozinha
 C) A pessoa digita a idade e o computador recebe essa informação  \nD) Nada irá acontecer
@@ -280,7 +302,7 @@ C) A pessoa digita a idade e o computador recebe essa informação  \nD) Nada ir
         "O comando input() faz o computador esperar que a pessoa digite alguma informação.",
     ],
     """
-O que é Python?
+O que é Python?\n
 A) Uma linguagem de programação  \nB) Um idioma
 C) Um jogo de computador  \nD) Um personagem de filme
 """: [
@@ -288,7 +310,7 @@ C) Um jogo de computador  \nD) Um personagem de filme
         "Python é uma linguagem usada para criar programas de computador.",
     ],
     """
-Para que serve uma linguagem de programação?
+Para que serve uma linguagem de programação?\n
 A) Para ouvir músicas no computador  \nB) Para deixar o computador mais rápido
 C) Para ensinar outros idiomas para o computador  \nD) Para passar informações para o computador de como fazer as coisas
 """: [
@@ -298,12 +320,13 @@ C) Para ensinar outros idiomas para o computador  \nD) Para passar informações
 }
 
 
-# Escrevi na parte de lógica, mas fugiu do assunto;
+# Ficou bem complexo, não sei se será utilizado
 """Com a invenção e frequentes avanços da tecnologia e computadores pessoais, foi fundamental
 criarmos uma forma mais fácil entre a nossa linguagem e a que o computador entende.
 
 Como ele lida com a transmissão elétrica entre suas 'peças', ele entende o número 0 como
-'sem energia' e 1 como 'com energia', e essa mudança entre 0 e 1 frequentes são 
-interpretadas como dados. Como seria muito complicado aprendermos a lidarmos com ele dessa
-forma, foram criadas linguagens de programação, e utilizando algumas palavras e símbolos 
-mais próximas do que conhecemos tornou essa comunicação bem mais fácil."""
+'sem energia' e 1 como 'com energia', e essas mudança entre 0 e 1 frequentes, organizadas
+de forma específicas são interpretadas como dados.
+Como seria muito complicado aprendermos a lidarmos com ele dessa forma, foram criadas
+linguagens de programação, e utilizando algumas palavras e símbolos mais próximas do que
+conhecemos tornou essa comunicação bem mais fácil."""
