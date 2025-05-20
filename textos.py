@@ -216,7 +216,7 @@ C) Usar uma sequencia como 12345678 já resolve   \nD) Pedir ajuda para um amigo
     ],
     """
 É seguro clicar em qualquer link que aparece nos jogos ou vídeos?\n
-A) Sim, se o link for enviado por alguém que você conhece no jogo  \nB) Não, porque alguns links podem ter vírus ou enganar você
+A) Sim, se o link for enviado por alguém que você conheceu no jogo  \nB) Não, porque alguns links podem ter vírus ou enganar você
 C) Só se o link dar prêmios ou moedas no jogo  \nD) Sim, porque todo link na internet é seguro
 """: [
         "B",
@@ -260,7 +260,7 @@ C) Irá seguir na ordem que foi passada  \nD) Só se pode passar um comando por 
     ],
     """
 O que significa um LOOP em programação?\n
-A) Repetir algo sem parar  \nB) Quando pedimos para ele trocar o que está fazendo
+A) Quando instruímos o programa a fazer algo várias vezes repetidamente  \nB) Quando pedimos para ele trocar o que está fazendo
 C) Um tipo de erro  \nD) Quando pedimos para ele fechar
 """: [
         "A",

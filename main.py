@@ -1,4 +1,7 @@
 import textos
+from aprender import *
+from utilitarios import limpar_console, get_horario, simular_carregamento
+
 import json
 import os
 from sys import exit
@@ -6,8 +9,6 @@ from csv import DictWriter
 from hashlib import sha256
 from dotenv import get_key
 from cryptography.fernet import Fernet
-from aprender import *
-from utilitarios import limpar_console, get_horario, simular_carregamento
 from matplotlib import pyplot as plt
 from datetime import datetime
 from random import choice
@@ -238,10 +239,13 @@ def cadastro():
         while True:  # Loop Confirmação de dados
             confirmacao_dados = input(
                 f"Verifique os dados inseridos:\nNome: {nome}\n\
-Ano de nascimento: {ano_nascimento}\nDigite 'S' para continuar ou 'N' para começar novamente.\n"
+Ano de nascimento: {ano_nascimento}\nDigite 'S' para continuar ou 'N' para começar novamente.\n\
+Se prefirir voltar para o Menu, digite 'voltar'.\n"
             ).upper()
             if confirmacao_dados in ("S", "N"):
                 break
+            elif confirmacao_dados == "VOLTAR":
+                return
         if confirmacao_dados == "N":
             limpar_console()
             continue
@@ -573,9 +577,10 @@ def quiz():
         escolha = materias[int(escolha)]
         variavel_texto_materia = f"questoes_{escolha}"
         nota = 0
+        contador = 1
         for questao, alternativa in getattr(textos, variavel_texto_materia).items():
             limpar_console()
-            entrada_usuario = input(questao).upper()
+            entrada_usuario = input(f"{contador}){questao}").upper()
             while entrada_usuario not in ("A", "B", "C", "D"):
                 limpar_console()
                 print("Resposta inválida, utiliza as letras das alternativas.")
@@ -592,6 +597,7 @@ def quiz():
                     f"{choice(textos.mensagens_resposta_incorreta).format(entrada_usuario)} \
 \n{alternativa[1]}\nAperte ENTER para continuar. "
                 )
+                contador += 1
                 input()
         input(
             f"Sua nota total do Quiz de {escolha.title()} foi {nota} de um total de 5 \
@@ -665,7 +671,7 @@ ENTER para voltar: """
         if senha_hash == usuario_completo["senha"]:
             confirmacao = input(
                 "\nVOCÊ TER CERTEZA? NÃO SERÁ POSSÍVEL RECUPERAR SUA CONTA!\
-\nDIGITE 'CANCELAR' PARA DESISTIR OU 'ENTER' PARA CONTINUAR: "
+\nDIGITE 'CANCELAR' PARA DESISTIR OU APERTE ENTER PARA CONTINUAR: "
             ).lower()
             if confirmacao == "cancelar":
                 return
@@ -689,14 +695,14 @@ def ranking(materia) -> None:
     dados_ranking = []
     for user in descriptografar_json().values():
         lista_usuario = []
-        for chave, valor in user.items():
-            if chave == "nome":
-                lista_usuario.append(valor)
-            elif chave == "materias":
-                if not valor.get(materia, []):
-                    lista_usuario = [0, " "]
-                else:
-                    lista_usuario.insert(0, (valor[materia][0]))
+        lista_usuario.append(user.get("nome", ""))
+        if lista_usuario[0] == None:
+            continue
+        lista_usuario.insert(0, user.get("materias").get(materia, ""))
+        if lista_usuario[0]:
+            lista_usuario[0] = max(lista_usuario[0])
+        else:
+            continue
         dados_ranking.append(lista_usuario)
 
     dados_ranking = sorted(dados_ranking, reverse=True)
@@ -711,7 +717,7 @@ def ranking(materia) -> None:
         if index > len(dados_ranking) - 1:
             print("".ljust(26) + "|")
         else:
-            if dados_ranking[index][0] == 0:
+            if not dados_ranking[index][0] or not dados_ranking[index][1]:
                 continue
             print(" ".join(dados_ranking[index][1].split()[:2]).ljust(23, " "), end="")
             if contagem < 3:
@@ -825,222 +831,10 @@ def main():
         elif escolha == "5":
             senha = input("Digite a senha de admin: ")
             if senha == get_key(ENV_PATH, "ADMIN_PW"):
-                gerar_dados_seguros()
                 gerar_csv()
                 limpar_console()
 
 
-# # Função Quiz ou Menu, quando chamada no fim de qualquer conteudo sobre Python exibe a pergunta para o usuario se ele deseja fazer um quiz sobre o conteudo ou voltar ao menu
-# def quizOUmenu():
-#     print("\nDeseja fazer um Quiz sobre o conteúdo estudado ou voltar ao menu? ")
-#     global escolha
-#     escolha = input("Digite 1 para o Quiz e 2 para voltar ao menu: ")
-#     return
-
-
-# # Função sair. Quando chamada exibe a pergunta se o usuario realmente deseja sair do programa
-# def Sair():
-#     print("\nVocê escolheu sair do programa, tem certeza que deseja sair? ")
-#     ver = str(input("Digite sim para sair e não para voltar ao menu\n"))
-#     if ver.lower() == "sim":
-#         print("Encerrando o Programa. . .")
-#     elif ver.lower() == "não":
-#         pass
-#     else:
-#         print("\nA opção escolhida é invalida, Digite conforme orientado.")
-#     return
-
-
-# função onde está a estrutura condicional do programa
-def Ifs():
-    global escolha
-    global comecar
-    global nome
-    global idade
-    global senha
-    global horasTotais
-    global qtdAcertos
-    global qtdErros
-    global mediaHoras
-    global mediaAcertos
-    global mediaErros
-    global mediaIdade
-    escolha = str(input("\nDigite o número referente a sua escolha para acessa-la: "))
-    if escolha == "1":
-        print("\nOpção Aprender escolhida. Escolha qual conteúdo estudar: ")
-        print(" 1 - Comando Print()")
-        print(" 2 - Comando Input()")
-        escolha = input("Digite o número referente ao conteudo que deseja estudar: ")
-        if escolha == "1":
-            print("\n================ Função print() ================\n")
-            print(
-                "A função print() em Python é uma função embutida que exibe mensagens na tela, como no console ou terminal."
-            )
-            print("É uma das funções mais usadas na linguagem.")
-            print("\n" "Explicação: \n")
-            print(
-                "Para usar a função print(), basta escrever "
-                "print()"
-                " seguido dos valores que deseja imprimir."
-            )
-            print(
-                "Quando deseja exibir uma menssagem de texto, basta colocar a menssagem entre aspas dentro dos"
-            )
-            print("paranteses, veja abaixo: ")
-            print('print("")')
-            print("Por exemplo: print(" "Olá, Mundo!" """)""")
-            print("O que a função print() pode exibir:")
-            print("A função print() pode exibir qualquer tipo de dado,")
-            print(
-                "incluindo textos(strings), números, resultados de operações ou qualquer outro objeto dentro de Python."
-            )
-            print("O conteúdo será sempre convertido a uma string para ser exibido.")
-            # quizOUmenu()
-            if escolha == "1":
-                print("\nIndentifique o erro de sintaxe no seguinte comando: ")
-                print('print("Hello, World)')
-                print(" A) - A lingua está em ingles")
-                print(" B) - O espaço depois da virgula")
-                print(" C) - Começar com letra maiuscula")
-                print(" D) - As aspas não terem sido fechadas")
-                RespQ = "h"
-                RespQ = str(input("A, B, C ou D? "))
-                if RespQ.upper() == "D":
-                    print("Resposta Correta! Parabéns !\n")
-                else:
-                    print("Você errou")
-            elif escolha == "2":
-                pass
-            else:
-                print("opção invalida")
-        elif escolha == "2":
-            print("\n================ Função input() ================")
-            print(
-                "\nA função input() do Python permite que o programa receba dados do utilizador."
-            )
-            print(
-                "É uma função built-in da linguagem ,ou seja, não é preciso instalá-la ou importá-la.\n"
-            )
-            print("Como funciona:\n")
-            print("A função é invocada com os parênteses ao final.")
-            print(
-                "O programa abre para a entrada padrão, que é o terminal, o utilizador digita algo."
-            )
-            print("A função retorna os dados como string para a saída padrão.\n")
-            print("Exemplos:")
-            print("1 - input(" "Digite algo: " ") ")
-            print("2 - n = input(" "Por favor digite o seu nome:" ")")
-            print("3 - umNome = input('Por favor digite o seu nome: ')")
-            print("\nConsiderações:")
-            print("Por padrão, a função input() armazena os dados como strings.")
-            print(
-                "Para armazenar um número inteiro digitado pelo utilizador, pode-se usar o comando (int) antes do input."
-            )
-            print(
-                "É possível fazer validações para verificar se o utilizador digitou algo ou não."
-            )
-            # quizOUmenu()
-            if escolha == "1":
-                print("\nO seguinte o comando esta dando erro:")
-                print("int(input(input(" "Digite sua senha" "))" "")
-                print("A)Não deveria ter Aspas")
-                print("B)int só é valido com numeros")
-                print("C)Não é necessario o input duas vezes")
-                print("D)O certo seria (Digite sua senha)")
-            elif escolha == "2":
-                pass
-            else:
-                print("Opção invalida. Insira 1 ou 2 conforme foi informado.")
-    elif escolha == "2":
-        print("\n================ Quiz de Python ================\n")
-        print("Deseja começar? ")
-        comecar = str(input("Sim - Não: "))
-        if comecar.lower() == "sim":
-            print("\nQue ano o Python foi criado?")
-            print(" A) - 2022")
-            print(" B) - 1989")
-            print(" C) - 1979")
-            print(" D) - 1995")
-            R1 = str(input("A, B, C ou D? "))
-            if R1.upper() == "B":
-                print("\n" "Resposta Correta! Parabéns!")
-            else:
-                print("Errouuuu!!!")
-            print("\n" "Segunda pergunta: O nome Python foi inspirado em um")
-            print(" A) - Nome de um algoritmo romano")
-            print(" B) - Grupo de escola de samba")
-            print(" C) - Grupo de comédia")
-            print(" D) - Nome do pai do criador")
-            R2 = str(input("A, B, C ou D? "))
-            if R2.upper() == "C":
-                print("Resposta Correta! Parabéns!")
-            else:
-                print("Errouuuu!!!")
-            print(
-                "\n"
-                "Terceira pergunta: Indentifique o erro de sintaxe no seguinte comando"
-            )
-            print("print(Hello, World)")
-            print(" A) - A lingua está em ingles")
-            print(" B) - O espaço depois da virgula")
-            print(" C) - Começar com letra maiuscula")
-            print(" D) - As aspas não terem sido fechadas")
-            R3 = str(input("A, B, C ou D? "))
-            if R3.upper() == "D":
-                print("Resposta Correta! Parabéns !")
-            else:
-                print("Errouuuu!!!")
-            print(
-                "\n"
-                "Quarta e ultima pergunta parabénss!: O seguinte o comando esta dando erro: int(input(input("
-                "Digite sua senha"
-                ")) qual alternativa abaixo corrige o erro"
-            )
-            print(" A) - Não deveria ter Aspas")
-            print(" B) - Não é necessario o input duas vezes")
-            print(" C) - int só é valido com numeros")
-            print(" D) - O certo seria int(input(input(Digite sua senha)))")
-            R4 = str(input("A, B, C ou D? "))
-            if R4.upper() == "B":
-                print("Resposta Correta! Parabéns !")
-            else:
-                print("Errouuu!!!")
-        elif comecar.lower() == "nao":
-            print("\nVocê escolheu não fazer o QUIZ, iremos te direcionar ao MENU.\n")
-        else:
-            print("\nOpção invalida, estamos te direcionando ao MENU.\n")
-    elif escolha == "3":
-        print("\n================ Consultar Progresso ================\n")
-        print("Nome: ", nome)
-        print("Idade ", idade)
-        print("Média da sua idade em relação aos outros usuários:", mediaIdade)
-        print("\nQuantidade de acertos: ", qtdAcertos)
-        print("Quantidade de erros: ", qtdErros)
-        print("Média de acertos:", mediaAcertos)
-        print("Média de erros:", mediaErros)
-        print("\nHoras totais de uso do programa: ", horasTotais)
-        print("Média de horas uso do programa: ", mediaHoras)
-        print("\nDigite 'menu' para voltar ao menu")
-        print("Digite 'ranking' para conferir sua pontuação no ranking")
-        print("Digite 'exibir' para visualizar de forma gráfica ")
-        if escolha.lower() == "menu":
-            pass
-        elif escolha.lower() == "ranking":
-            print("ranking. . .")
-        elif escolha.lower() == "exibir":
-            print("Visualização dos grafico mil grau chique no ultimo")
-        else:
-            print("Opção invalida")
-    elif escolha == "4":
-        login()
-    elif escolha == "5":
-        # Sair()
-        pass
-    else:
-        print("\nOpção invalida\n")
-    return
-
-
-# ============= CÓDIGO =============-
+# ============= CÓDIGO =============
 if __name__ == "__main__":
     main()

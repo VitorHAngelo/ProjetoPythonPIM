@@ -20,7 +20,7 @@
 - [x] Implementar ordem no cadastro e incrementar no quiz
 - [x] Trocar primeira nota por maior no ranking
 - [x] Aprender
-- [ ] Salvar ao terminar atividade
+- [x] Salvar ao terminar atividade
 - [ ] Escalabilidade, um script que une CSV's
 
 ## 🔹 Gustavo
