@@ -1,5 +1,17 @@
 # ProjetoPythonPIM
-Repositório dedicado ao projeto utilizando Python para o PIM do 1º semestre de ADS UNIP.
+Repositório dedicado ao Projeto Integrador Multidisciplinar utilizando Python. (1º semestre de ADS UNIP).
+
+Foram empregadas diversas matérias para o desenvolvimento deste projeto, como:
+- Pensamento Lógico Computacional com Python
+- Infraestrutura Computacional
+- Tecnologia da Informação e Comunicação
+- Matemática e Estatística
+- Ética, cidadania e Sustentabilidade
+- Cibersegurança
+- LGPD
+- Direitos Humanos
+
+
 Confira o [TODO.md](TODO.md) para ver o que ainda está pendente no projeto.
 
 Playlist do Youtube com vídeos nossos para explicação das ferramentas e escolhas para o
